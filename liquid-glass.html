@@ -129,35 +129,35 @@ body {
 /* ---- Dark Theme Tokens ---- */
 [data-theme="dark"] {
   --glass-blur: 24px;
-  --glass-opacity: 0.18;
-  --glass-tint-opacity: 0.06;
-  --glass-border-opacity: 0.15;
-  --glass-specular-opacity: 0.25;
-  --glass-shadow-opacity: 0.3;
+  --glass-opacity: 0.12;
+  --glass-tint-opacity: 0.08;
+  --glass-border-opacity: 0.12;
+  --glass-specular-opacity: 0.2;
+  --glass-shadow-opacity: 0.4;
 
-  --glass-bg-rgb: 30, 30, 40;
-  --glass-tint-rgb: 80, 80, 120;
+  --glass-bg-rgb: 15, 10, 30;
+  --glass-tint-rgb: 100, 80, 160;
   --glass-border: rgba(255, 255, 255, var(--glass-border-opacity));
   --glass-shadow: rgba(0, 0, 0, var(--glass-shadow-opacity));
   --glass-specular: rgba(255, 255, 255, var(--glass-specular-opacity));
 
-  --surface-primary: rgba(30, 30, 40, 0.65);
-  --surface-secondary: rgba(40, 40, 55, 0.5);
-  --surface-tertiary: rgba(50, 50, 65, 0.35);
+  --surface-primary: rgba(20, 15, 40, 0.55);
+  --surface-secondary: rgba(25, 20, 50, 0.4);
+  --surface-tertiary: rgba(30, 25, 55, 0.3);
 
-  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-primary: rgba(255, 255, 255, 0.94);
   --text-secondary: rgba(255, 255, 255, 0.6);
   --text-tertiary: rgba(255, 255, 255, 0.35);
   --text-inverse: rgba(0, 0, 0, 0.88);
 
-  --bg-gradient-stop-1: #0f2027;
-  --bg-gradient-stop-2: #203a43;
-  --bg-gradient-stop-3: #2c5364;
-  --bg-gradient-stop-4: #1a1a2e;
+  --bg-gradient-stop-1: #120a28;
+  --bg-gradient-stop-2: #1a1040;
+  --bg-gradient-stop-3: #0d1f3c;
+  --bg-gradient-stop-4: #1e0a2e;
 
-  --divider: rgba(255, 255, 255, 0.08);
-  --skeleton-base: rgba(255, 255, 255, 0.06);
-  --skeleton-shine: rgba(255, 255, 255, 0.15);
+  --divider: rgba(255, 255, 255, 0.06);
+  --skeleton-base: rgba(255, 255, 255, 0.05);
+  --skeleton-shine: rgba(255, 255, 255, 0.12);
 }
 
 /* ---- Accent Color Tokens ---- */
@@ -1777,17 +1777,19 @@ body {
 .bg-picker {
   display: flex;
   gap: 8px;
-  overflow-x: auto;
   padding: 2px 0;
-  scrollbar-width: none;
+}
+
+.settings-row:has(.bg-picker) {
+  overflow: visible;
 }
 .bg-picker::-webkit-scrollbar { display: none; }
 
 .bg-thumb {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  border: 3px solid transparent;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2.5px solid transparent;
   cursor: pointer;
   background-size: cover;
   background-position: center;
@@ -1798,7 +1800,7 @@ body {
 
 .bg-thumb.active {
   border-color: var(--accent);
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
 .bg-thumb-gradient {
@@ -2451,28 +2453,25 @@ function initCardInteractions() {
     });
   });
 
-  // Hover lift for cards (desktop)
-  document.addEventListener('pointerenter', (e) => {
-    if (e.pointerType === 'touch') return;
-    const card = e.target.closest?.('.glass-card-interactive');
-    if (!card) return;
-    const id = 'card-hover-' + (card.id || Math.random());
-    springAnimator.animate(id, new Spring(Spring.GENTLE), 0, -4, (val) => {
-      card.style.transform = `translateY(${val}px) scale(1.015)`;
-    });
-  }, true);
+  // Hover lift for cards (desktop) — use mouseenter/mouseleave which don't bubble into children
+  let cardIdCounter = 0;
+  document.querySelectorAll('.glass-card-interactive').forEach(card => {
+    const hid = 'card-hover-' + (card.id || ++cardIdCounter);
 
-  document.addEventListener('pointerleave', (e) => {
-    if (e.pointerType === 'touch') return;
-    const card = e.target.closest?.('.glass-card-interactive');
-    if (!card) return;
-    const id = 'card-hover-' + (card.id || Math.random());
-    springAnimator.animate(id, new Spring(Spring.GENTLE), -4, 0, (val) => {
-      card.style.transform = `translateY(${val}px) scale(${1.015 + val / 267})`;
-    }, () => {
-      card.style.transform = '';
+    card.addEventListener('mouseenter', (e) => {
+      springAnimator.animate(hid, new Spring(Spring.GENTLE), 0, -4, (val) => {
+        card.style.transform = `translateY(${val}px) scale(1.015)`;
+      });
     });
-  }, true);
+
+    card.addEventListener('mouseleave', (e) => {
+      springAnimator.animate(hid, new Spring(Spring.GENTLE), -4, 0, (val) => {
+        card.style.transform = `translateY(${val}px) scale(${1.015 + val / 267})`;
+      }, () => {
+        card.style.transform = '';
+      });
+    });
+  });
 }
 initCardInteractions();
 
