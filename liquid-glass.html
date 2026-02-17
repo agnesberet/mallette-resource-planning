@@ -1,0 +1,3252 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-accent="blue">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Mallette Resource Planning — Liquid Glass</title>
+
+<!-- ============================================
+     LIQUID GLASS DESIGN SYSTEM
+     Single self-contained file
+     Inspired by Apple iOS 26 / macOS 26
+     ============================================ -->
+
+<style>
+/* ============================================
+   STEP 1: CSS FOUNDATION & THEME SYSTEM
+   ============================================ */
+
+/* @property registrations for animatable custom properties */
+@property --glass-blur {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 20px;
+}
+@property --glass-opacity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.25;
+}
+@property --glass-tint-opacity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.08;
+}
+@property --glass-border-opacity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.2;
+}
+@property --glass-specular-opacity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.4;
+}
+@property --glass-shadow-opacity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.1;
+}
+@property --bg-gradient-stop-1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #a8edea;
+}
+@property --bg-gradient-stop-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #fed6e3;
+}
+@property --bg-gradient-stop-3 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #d4fc79;
+}
+@property --bg-gradient-stop-4 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #96e6a1;
+}
+
+/* Base reset */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  height: 100%;
+  touch-action: manipulation;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.5s ease;
+}
+
+/* ---- Light Theme Tokens ---- */
+:root,
+[data-theme="light"] {
+  --glass-blur: 20px;
+  --glass-opacity: 0.25;
+  --glass-tint-opacity: 0.08;
+  --glass-border-opacity: 0.25;
+  --glass-specular-opacity: 0.5;
+  --glass-shadow-opacity: 0.08;
+
+  --glass-bg-rgb: 255, 255, 255;
+  --glass-tint-rgb: 255, 255, 255;
+  --glass-border: rgba(255, 255, 255, var(--glass-border-opacity));
+  --glass-shadow: rgba(0, 0, 0, var(--glass-shadow-opacity));
+  --glass-specular: rgba(255, 255, 255, var(--glass-specular-opacity));
+
+  --surface-primary: rgba(255, 255, 255, 0.7);
+  --surface-secondary: rgba(255, 255, 255, 0.45);
+  --surface-tertiary: rgba(255, 255, 255, 0.3);
+
+  --text-primary: rgba(0, 0, 0, 0.88);
+  --text-secondary: rgba(0, 0, 0, 0.55);
+  --text-tertiary: rgba(0, 0, 0, 0.35);
+  --text-inverse: rgba(255, 255, 255, 0.95);
+
+  --bg-gradient-stop-1: #a8edea;
+  --bg-gradient-stop-2: #fed6e3;
+  --bg-gradient-stop-3: #d4fc79;
+  --bg-gradient-stop-4: #96e6a1;
+
+  --divider: rgba(0, 0, 0, 0.08);
+  --skeleton-base: rgba(255, 255, 255, 0.3);
+  --skeleton-shine: rgba(255, 255, 255, 0.7);
+}
+
+/* ---- Dark Theme Tokens ---- */
+[data-theme="dark"] {
+  --glass-blur: 24px;
+  --glass-opacity: 0.18;
+  --glass-tint-opacity: 0.06;
+  --glass-border-opacity: 0.15;
+  --glass-specular-opacity: 0.25;
+  --glass-shadow-opacity: 0.3;
+
+  --glass-bg-rgb: 30, 30, 40;
+  --glass-tint-rgb: 80, 80, 120;
+  --glass-border: rgba(255, 255, 255, var(--glass-border-opacity));
+  --glass-shadow: rgba(0, 0, 0, var(--glass-shadow-opacity));
+  --glass-specular: rgba(255, 255, 255, var(--glass-specular-opacity));
+
+  --surface-primary: rgba(30, 30, 40, 0.65);
+  --surface-secondary: rgba(40, 40, 55, 0.5);
+  --surface-tertiary: rgba(50, 50, 65, 0.35);
+
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.35);
+  --text-inverse: rgba(0, 0, 0, 0.88);
+
+  --bg-gradient-stop-1: #0f2027;
+  --bg-gradient-stop-2: #203a43;
+  --bg-gradient-stop-3: #2c5364;
+  --bg-gradient-stop-4: #1a1a2e;
+
+  --divider: rgba(255, 255, 255, 0.08);
+  --skeleton-base: rgba(255, 255, 255, 0.06);
+  --skeleton-shine: rgba(255, 255, 255, 0.15);
+}
+
+/* ---- Accent Color Tokens ---- */
+[data-accent="blue"] {
+  --accent: #007AFF;
+  --accent-rgb: 0, 122, 255;
+  --accent-light: #5AC8FA;
+  --accent-dark: #0055CC;
+}
+[data-accent="purple"] {
+  --accent: #AF52DE;
+  --accent-rgb: 175, 82, 222;
+  --accent-light: #DA8FFF;
+  --accent-dark: #8944AB;
+}
+[data-accent="teal"] {
+  --accent: #5AC8FA;
+  --accent-rgb: 90, 200, 250;
+  --accent-light: #70D7FF;
+  --accent-dark: #30B0C7;
+}
+[data-accent="orange"] {
+  --accent: #FF9500;
+  --accent-rgb: 255, 149, 0;
+  --accent-light: #FFB340;
+  --accent-dark: #CC7700;
+}
+
+/* ---- Reduced Motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 200ms !important;
+  }
+}
+
+/* Theme transition on html element */
+[data-theme] {
+  transition:
+    --glass-blur 0.5s ease,
+    --glass-opacity 0.5s ease,
+    --glass-tint-opacity 0.5s ease,
+    --glass-border-opacity 0.5s ease,
+    --glass-specular-opacity 0.5s ease,
+    --glass-shadow-opacity 0.5s ease,
+    --bg-gradient-stop-1 0.5s ease,
+    --bg-gradient-stop-2 0.5s ease,
+    --bg-gradient-stop-3 0.5s ease,
+    --bg-gradient-stop-4 0.5s ease;
+}
+
+
+/* ============================================
+   STEP 2: GLASS MATERIAL SYSTEM
+   ============================================ */
+
+/* SVG filter for noise texture — referenced via url(#glass-noise) */
+
+/* Base glass class — multi-layer frosted material */
+.glass {
+  position: relative;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0.04) 40%,
+      rgba(var(--glass-tint-rgb), var(--glass-tint-opacity)) 100%
+    ),
+    radial-gradient(ellipse at 50% 0%,
+      rgba(255, 255, 255, 0.12),
+      transparent 70%),
+    rgba(var(--glass-bg-rgb), var(--glass-opacity));
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.6) brightness(1.05);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.6) brightness(1.05);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top-color: rgba(255, 255, 255, 0.35);
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  box-shadow:
+    0 4px 24px -2px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.06),
+    inset 0 0 20px rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+[data-theme="dark"] .glass {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.01) 40%,
+      rgba(var(--glass-tint-rgb), var(--glass-tint-opacity)) 100%
+    ),
+    radial-gradient(ellipse at 50% 0%,
+      rgba(255, 255, 255, 0.05),
+      transparent 70%),
+    rgba(var(--glass-bg-rgb), var(--glass-opacity));
+  border-color: rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.8) brightness(0.95);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8) brightness(0.95);
+}
+
+/* Specular highlight — always-visible top edge band + mouse-tracked radial */
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0.06) 3px,
+      transparent 40%
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Noise texture overlay */
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(128, 128, 128, 0.5);
+  filter: url(#glass-noise);
+  opacity: 1;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: soft-light;
+}
+
+/* Elevation levels — deeper shadows + richer inner glow per tier */
+.glass-1 {
+  --glass-blur: 16px;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.06),
+    0 0.5px 2px rgba(0,0,0,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.2),
+    inset 0 0 12px rgba(255,255,255,0.03);
+}
+.glass-2 {
+  --glass-blur: 24px;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.08),
+    0 1px 3px rgba(0,0,0,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 0 20px rgba(255,255,255,0.04);
+}
+.glass-3 {
+  --glass-blur: 32px;
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.10),
+    0 2px 6px rgba(0,0,0,0.05),
+    inset 0 1.5px 0 rgba(255,255,255,0.3),
+    inset 0 0 30px rgba(255,255,255,0.05);
+}
+.glass-4 {
+  --glass-blur: 48px;
+  box-shadow:
+    0 16px 56px rgba(0,0,0,0.12),
+    0 3px 8px rgba(0,0,0,0.06),
+    inset 0 2px 0 rgba(255,255,255,0.35),
+    inset 0 0 40px rgba(255,255,255,0.06);
+}
+
+/* Prismatic refraction edge on hover */
+.glass-prismatic {
+  position: relative;
+  transition: box-shadow 0.4s ease;
+}
+.glass-prismatic:hover {
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.08),
+    0 0.5px 2px rgba(0,0,0,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    inset 0 0 16px rgba(var(--accent-rgb), 0.06),
+    0 0 0 1px rgba(255,255,255,0.08),
+    3px 0 12px -4px rgba(255, 100, 200, 0.08),
+    -3px 0 12px -4px rgba(100, 180, 255, 0.08);
+}
+
+
+/* ============================================
+   ANIMATED BACKGROUND
+   ============================================ */
+
+.app-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    135deg,
+    var(--bg-gradient-stop-1) 0%,
+    var(--bg-gradient-stop-2) 35%,
+    var(--bg-gradient-stop-3) 65%,
+    var(--bg-gradient-stop-4) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+  transition: opacity 0.5s ease;
+}
+
+/* Photo background layer — sits behind gradient, shown when gradient is hidden */
+.app-background-photo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.6s ease, background-image 0.6s ease;
+}
+
+.app-background-photo.active {
+  opacity: 1;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+/* ============================================
+   APP LAYOUT
+   ============================================ */
+
+.app-container {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 600px;
+    border-left: 1px solid var(--glass-border);
+    border-right: 1px solid var(--glass-border);
+  }
+}
+
+
+/* ============================================
+   COMPONENT STYLES
+   ============================================ */
+
+/* ---- GlassNavBar ---- */
+.glass-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 20px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  background: rgba(var(--glass-bg-rgb), 0);
+  backdrop-filter: blur(0px) saturate(1);
+  -webkit-backdrop-filter: blur(0px) saturate(1);
+  border-bottom: 1px solid transparent;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-navbar.scrolled {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(var(--glass-bg-rgb), var(--glass-opacity)) 100%);
+  backdrop-filter: blur(28px) saturate(1.6) brightness(1.05);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6) brightness(1.05);
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 1px 12px rgba(0,0,0,0.04), inset 0 -0.5px 0 rgba(0,0,0,0.04);
+}
+
+.navbar-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  transition: font-size 0.3s ease, opacity 0.3s ease;
+}
+
+.glass-navbar.scrolled .navbar-title {
+  font-size: 17px;
+}
+
+.navbar-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ---- GlassTabBar ---- */
+.glass-tabbar {
+  position: relative;
+  z-index: 100;
+  padding: 10px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background:
+    linear-gradient(0deg, rgba(255,255,255,0.12) 0%, rgba(var(--glass-bg-rgb), var(--glass-opacity)) 100%);
+  backdrop-filter: blur(28px) saturate(1.6) brightness(1.05);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6) brightness(1.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 -1px 12px rgba(0,0,0,0.04), inset 0 0.5px 0 rgba(255,255,255,0.2);
+}
+
+.tabbar-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 460px;
+}
+
+.tab-pill {
+  position: absolute;
+  top: 50%;
+  height: 52px;
+  transform: translateY(-50%);
+  border-radius: 26px;
+  background:
+    linear-gradient(180deg, rgba(var(--accent-rgb), 0.18) 0%, rgba(var(--accent-rgb), 0.08) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  box-shadow:
+    0 2px 8px rgba(var(--accent-rgb), 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 0 12px rgba(var(--accent-rgb), 0.05);
+  transition: none; /* Controlled by spring */
+  z-index: 0;
+  pointer-events: none;
+}
+
+.tab-item {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab-item.active {
+  color: var(--accent);
+}
+
+.tab-item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tab-item.active svg {
+  fill: currentColor;
+  fill-opacity: 0.15;
+}
+
+/* ---- GlassButton ---- */
+.glass-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top-color: rgba(255, 255, 255, 0.3);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 100%),
+    rgba(var(--glass-bg-rgb), 0.06);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.04),
+    0 0.5px 1px rgba(0,0,0,0.03),
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 0 16px rgba(255,255,255,0.03);
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glass-btn:hover {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.04) 100%),
+    rgba(var(--glass-bg-rgb), 0.1);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.06),
+    0 0.5px 1px rgba(0,0,0,0.03),
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    inset 0 0 20px rgba(255,255,255,0.04);
+}
+
+.glass-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--click-x, 50%) var(--click-y, 50%), rgba(255,255,255,0.25), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.glass-btn.glow::before {
+  opacity: 1;
+}
+
+.glass-btn-primary {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 60%),
+    rgba(var(--accent-rgb), 0.4);
+  border-color: rgba(var(--accent-rgb), 0.2);
+  border-top-color: rgba(255, 255, 255, 0.22);
+  border-bottom-color: rgba(var(--accent-rgb), 0.1);
+  color: #fff;
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow:
+    0 2px 16px rgba(var(--accent-rgb), 0.15),
+    0 0.5px 1px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    inset 0 0 20px rgba(255,255,255,0.05);
+}
+
+.glass-btn-primary:hover {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 60%),
+    rgba(var(--accent-rgb), 0.5);
+  box-shadow:
+    0 4px 24px rgba(var(--accent-rgb), 0.2),
+    0 0.5px 1px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.32),
+    inset 0 0 24px rgba(255,255,255,0.06);
+}
+
+.glass-btn-primary::before {
+  background: radial-gradient(circle at var(--click-x, 50%) var(--click-y, 50%), rgba(255,255,255,0.3), transparent 60%);
+}
+
+.glass-btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.glass-btn-ghost:hover {
+  background: rgba(var(--glass-bg-rgb), 0.08);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.glass-btn-sm {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.glass-btn-round {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.glass-btn-round svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---- GlassCard ---- */
+.glass-card {
+  padding: 16px;
+  cursor: default;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card-interactive {
+  cursor: pointer;
+}
+
+.glass-card-interactive:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.1),
+    0 2px 6px rgba(0,0,0,0.05),
+    inset 0 1.5px 0 rgba(255,255,255,0.3),
+    inset 0 0 20px rgba(255,255,255,0.06);
+}
+
+.glass-card + .glass-card {
+  margin-top: 12px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.card-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.card-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Stat cards grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat-card {
+  padding: 16px;
+}
+
+.stat-card .card-value {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+/* ---- GlassToggle ---- */
+.glass-toggle {
+  position: relative;
+  width: 52px;
+  height: 32px;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(var(--glass-bg-rgb), 0.35) 0%, rgba(var(--glass-bg-rgb), 0.2) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 3px rgba(0,0,0,0.06),
+    inset 0 0 8px rgba(0,0,0,0.03),
+    0 0.5px 2px rgba(0,0,0,0.04);
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-toggle.active {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%),
+    rgba(var(--accent-rgb), 0.65);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.2),
+    0 0 12px rgba(var(--accent-rgb), 0.15),
+    0 0.5px 2px rgba(0,0,0,0.04);
+}
+
+.glass-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 40% 35%, rgba(255,255,255,1) 0%, rgba(240,240,245,0.95) 100%);
+  border: 0.5px solid rgba(0,0,0,0.04);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.15),
+    0 0.5px 1.5px rgba(0,0,0,0.1),
+    inset 0 1px 2px rgba(255,255,255,0.9),
+    inset 0 -0.5px 1px rgba(0,0,0,0.04);
+  /* transform controlled by spring */
+}
+
+.glass-toggle.active .glass-toggle-thumb {
+  /* translateX(21px) applied by spring */
+}
+
+/* ---- GlassTextField ---- */
+.glass-textfield {
+  position: relative;
+}
+
+.glass-textfield input,
+.glass-textfield textarea {
+  width: 100%;
+  padding: 14px 16px;
+  padding-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top-color: rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(var(--glass-bg-rgb), 0.12) 100%);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  box-shadow:
+    inset 0 1px 3px rgba(0,0,0,0.04),
+    inset 0 0 8px rgba(0,0,0,0.02),
+    0 0.5px 0 rgba(255,255,255,0.1);
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-textfield input:focus,
+.glass-textfield textarea:focus {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  border-top-color: rgba(var(--accent-rgb), 0.6);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(var(--glass-bg-rgb), 0.18) 100%);
+  box-shadow:
+    0 0 0 3px rgba(var(--accent-rgb), 0.12),
+    0 0 16px rgba(var(--accent-rgb), 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset 0 0 8px rgba(var(--accent-rgb), 0.03);
+}
+
+.glass-textfield label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+  transition: all 0.2s ease;
+  transform-origin: left center;
+}
+
+.glass-textfield input:focus ~ label,
+.glass-textfield input:not(:placeholder-shown) ~ label,
+.glass-textfield textarea:focus ~ label,
+.glass-textfield textarea:not(:placeholder-shown) ~ label {
+  top: 10px;
+  transform: translateY(0) scale(0.75);
+  color: var(--accent);
+}
+
+/* ---- GlassSegmentedControl ---- */
+.glass-segmented {
+  position: relative;
+  display: inline-flex;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(var(--glass-bg-rgb), 0.12) 100%);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  padding: 4px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,0.06),
+    inset 0 0 12px rgba(0,0,0,0.02),
+    0 0.5px 0 rgba(255,255,255,0.08);
+}
+
+.segment-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.06) 100%),
+    rgba(var(--glass-bg-rgb), 0.12);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-top-color: rgba(255, 255, 255, 0.4);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 2px 12px rgba(0,0,0,0.06),
+    0 0.5px 1px rgba(0,0,0,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.35),
+    inset 0 -0.5px 0 rgba(0,0,0,0.03),
+    inset 0 0 12px rgba(255,255,255,0.06);
+  /* position controlled by spring */
+  pointer-events: none;
+  z-index: 0;
+  transition: box-shadow 0.2s ease;
+}
+
+.segment-btn {
+  position: relative;
+  z-index: 1;
+  padding: 9px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-tertiary);
+  border-radius: 10px;
+  transition: color 0.25s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.segment-btn:hover:not(.active) {
+  color: var(--text-secondary);
+}
+
+.segment-btn:active {
+  transform: scale(0.96);
+}
+
+.segment-btn.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ---- GlassSlider ---- */
+.glass-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.glass-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(var(--glass-bg-rgb), 0.25);
+  outline: none;
+  position: relative;
+  box-shadow: inset 0 0.5px 2px rgba(0,0,0,0.06);
+}
+
+.glass-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 40% 35%, rgba(255,255,255,1) 0%, rgba(240,240,245,0.95) 100%);
+  border: 0.5px solid rgba(0,0,0,0.06);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.12),
+    0 0.5px 2px rgba(0,0,0,0.08),
+    inset 0 1px 2px rgba(255,255,255,0.9),
+    0 0 0 0 rgba(var(--accent-rgb), 0);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.glass-slider::-webkit-slider-thumb:active {
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.12),
+    0 0.5px 2px rgba(0,0,0,0.08),
+    inset 0 1px 2px rgba(255,255,255,0.9),
+    0 0 0 6px rgba(var(--accent-rgb), 0.12),
+    0 0 12px rgba(var(--accent-rgb), 0.15);
+}
+
+.glass-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 40% 35%, rgba(255,255,255,1) 0%, rgba(240,240,245,0.95) 100%);
+  border: 0.5px solid rgba(0,0,0,0.06);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.12),
+    inset 0 1px 2px rgba(255,255,255,0.9);
+  cursor: pointer;
+}
+
+.slider-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 32px;
+  text-align: center;
+}
+
+/* ---- GlassModal ---- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-container {
+  position: fixed;
+  inset: 0;
+  z-index: 501;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.modal-backdrop.visible + .modal-container {
+  pointer-events: auto;
+}
+
+.glass-modal {
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 24px;
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  /* animated by spring */
+}
+
+.glass-modal.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ---- GlassSheet ---- */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sheet-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.glass-sheet {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 401;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  margin: 0;
+  border-radius: 20px;
+  padding: 12px 20px 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: translate(-50%, -50%) translateY(40px) scale(0.95);
+  opacity: 0;
+  /* animated by spring */
+  touch-action: none;
+}
+
+.glass-sheet.visible {
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+.sheet-handle {
+  width: 36px;
+  height: 5px;
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.45), rgba(255,255,255,0.2));
+  border: 0.5px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0.5px 2px rgba(0,0,0,0.08);
+  margin: 0 auto 16px;
+}
+
+.sheet-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* ---- GlassList ---- */
+.glass-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 2px 12px rgba(0,0,0,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.glass-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(var(--glass-bg-rgb), var(--glass-opacity)) 100%);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-list-item:last-child {
+  border-bottom: none;
+}
+
+.glass-list-item:active {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(var(--glass-bg-rgb), calc(var(--glass-opacity) + 0.08)) 100%);
+}
+
+.list-item-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background:
+    linear-gradient(135deg, rgba(var(--accent-rgb), 0.25), rgba(var(--accent-rgb), 0.08));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  box-shadow:
+    0 1px 4px rgba(var(--accent-rgb), 0.1),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.list-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.list-item-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.2px;
+}
+
+.badge-available {
+  background: rgba(0, 210, 200, 0.14);
+  color: #00c9b8;
+  border-color: rgba(0, 210, 200, 0.2);
+}
+
+.badge-assigned {
+  background: rgba(60, 130, 255, 0.14);
+  color: #3b82f6;
+  border-color: rgba(60, 130, 255, 0.2);
+}
+
+.badge-leave {
+  background: rgba(235, 90, 140, 0.14);
+  color: #e0508c;
+  border-color: rgba(235, 90, 140, 0.2);
+}
+
+/* ---- GlassNotification ---- */
+.notification-container {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 600;
+  width: calc(100% - 32px);
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.glass-notification {
+  padding: 14px 16px;
+  border-radius: 16px;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+  cursor: pointer;
+}
+
+.glass-notification.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notification-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(var(--accent-rgb), 0.25), rgba(var(--accent-rgb), 0.1));
+  border: 0.5px solid rgba(var(--accent-rgb), 0.15);
+  box-shadow:
+    0 1px 4px rgba(var(--accent-rgb), 0.1),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notification-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 2;
+}
+
+.notification-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.notification-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.notification-progress {
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(var(--glass-bg-rgb), 0.15);
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.notification-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 1px;
+  transition: width linear;
+}
+
+/* ---- GlassContextMenu ---- */
+.context-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 700;
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.context-menu-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.glass-context-menu {
+  position: fixed;
+  z-index: 701;
+  min-width: 200px;
+  padding: 6px;
+  border-radius: 14px;
+  opacity: 0;
+  transform: scale(0.8);
+  /* transform-origin set dynamically */
+}
+
+.glass-context-menu.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-primary);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.context-menu-item:hover {
+  background:
+    linear-gradient(180deg, rgba(var(--accent-rgb), 0.1) 0%, rgba(var(--accent-rgb), 0.04) 100%);
+  box-shadow: inset 0 0 8px rgba(var(--accent-rgb), 0.04);
+}
+
+.context-menu-item svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--text-secondary);
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.context-menu-divider {
+  height: 1px;
+  background: var(--divider);
+  margin: 4px 8px;
+}
+
+.context-menu-item.destructive {
+  color: #FF3B30;
+}
+.context-menu-item.destructive svg {
+  stroke: #FF3B30;
+}
+
+
+/* ============================================
+   PAGE CONTENT STYLES
+   ============================================ */
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.page-section {
+  padding: 16px 16px 24px;
+}
+
+.page-section:first-child {
+  padding-top: 8px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+
+/* Settings rows */
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  gap: 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.settings-row + .settings-row {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-label {
+  font-size: 15px;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(var(--glass-bg-rgb), 0.2);
+  box-shadow: inset 0 0.5px 2px rgba(0,0,0,0.06);
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.7), var(--accent));
+  box-shadow:
+    0 0 8px rgba(var(--accent-rgb), 0.3),
+    inset 0 0.5px 0 rgba(255,255,255,0.3);
+  transition: width 0.5s ease;
+}
+
+/* Project card extras */
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.project-meta svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.project-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* View transition styles */
+.tab-page {
+  display: none;
+  min-height: 100%;
+}
+
+.tab-page.active {
+  display: block;
+  animation: pageIn 0.35s ease both;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Stagger entrance for children */
+.stagger-in > * {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: staggerItem 0.4s ease forwards;
+}
+
+@keyframes staggerItem {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-in > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-in > *:nth-child(2) { animation-delay: 40ms; }
+.stagger-in > *:nth-child(3) { animation-delay: 80ms; }
+.stagger-in > *:nth-child(4) { animation-delay: 120ms; }
+.stagger-in > *:nth-child(5) { animation-delay: 160ms; }
+.stagger-in > *:nth-child(6) { animation-delay: 200ms; }
+.stagger-in > *:nth-child(7) { animation-delay: 240ms; }
+.stagger-in > *:nth-child(8) { animation-delay: 280ms; }
+.stagger-in > *:nth-child(9) { animation-delay: 320ms; }
+.stagger-in > *:nth-child(10) { animation-delay: 360ms; }
+
+/* Skeleton loader */
+.skeleton {
+  background: var(--skeleton-base);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--skeleton-shine),
+    transparent
+  );
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Hero card */
+.hero-card {
+  padding: 24px;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+.hero-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.hero-date {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* Empty states */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+/* Form grid */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+/* Search field */
+.search-field {
+  position: relative;
+}
+
+.search-field svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  stroke: var(--text-tertiary);
+  fill: none;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.search-field input {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top-color: rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(var(--glass-bg-rgb), 0.12) 100%);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  box-shadow:
+    inset 0 1px 3px rgba(0,0,0,0.04),
+    inset 0 0 8px rgba(0,0,0,0.02),
+    0 0.5px 0 rgba(255,255,255,0.1);
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.search-field input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-field input:focus {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  border-top-color: rgba(var(--accent-rgb), 0.6);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(var(--glass-bg-rgb), 0.18) 100%);
+  box-shadow:
+    0 0 0 3px rgba(var(--accent-rgb), 0.12),
+    0 0 16px rgba(var(--accent-rgb), 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* Profile in sheet */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background:
+    linear-gradient(135deg, rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.08));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  box-shadow:
+    0 2px 8px rgba(var(--accent-rgb), 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 0 12px rgba(var(--accent-rgb), 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.profile-role {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+.profile-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(var(--glass-bg-rgb), var(--glass-opacity)) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 14px;
+}
+
+.profile-detail-label {
+  color: var(--text-secondary);
+}
+
+.profile-detail-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* About card */
+.about-card {
+  text-align: center;
+  padding: 24px;
+}
+
+.about-card .card-title {
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.about-card .card-subtitle {
+  font-size: 12px;
+}
+
+/* Accent color picker */
+.accent-picker {
+  display: flex;
+  gap: 8px;
+}
+
+.accent-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.accent-swatch.active {
+  border-color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.accent-swatch[data-accent="blue"] { background: #007AFF; }
+.accent-swatch[data-accent="purple"] { background: #AF52DE; }
+.accent-swatch[data-accent="teal"] { background: #5AC8FA; }
+.accent-swatch[data-accent="orange"] { background: #FF9500; }
+
+/* Background picker thumbnails */
+.bg-picker {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0;
+  scrollbar-width: none;
+}
+.bg-picker::-webkit-scrollbar { display: none; }
+
+.bg-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  border: 3px solid transparent;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bg-thumb.active {
+  border-color: var(--accent);
+  transform: scale(1.08);
+}
+
+.bg-thumb-gradient {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #96e6a1 100%);
+}
+
+[data-theme="dark"] .bg-thumb-gradient {
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #1a1a2e 100%);
+}
+
+/* Back arrow for sub-pages */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.back-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Scrollbar styling */
+.page-content::-webkit-scrollbar {
+  width: 4px;
+}
+.page-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.page-content::-webkit-scrollbar-thumb {
+  background: rgba(var(--glass-bg-rgb), 0.3);
+  border-radius: 2px;
+}
+</style>
+
+</head>
+<body>
+
+<!-- SVG Filters -->
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <defs>
+    <filter id="glass-noise" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="linearRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" seed="2" stitchTiles="stitch" result="noise" />
+      <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
+      <feComponentTransfer in="grayNoise" result="crunchNoise">
+        <feFuncA type="discrete" tableValues="0 0.08 0.12 0.16 0.12 0.08 0" />
+      </feComponentTransfer>
+      <feComposite in="crunchNoise" in2="SourceGraphic" operator="in" result="clippedNoise" />
+    </filter>
+  </defs>
+</svg>
+
+<!-- Photo background (behind gradient) -->
+<div class="app-background-photo" id="appBgPhoto"></div>
+<!-- Animated gradient background -->
+<div class="app-background" id="appBg"></div>
+
+<!-- App container -->
+<div class="app-container" id="app">
+
+  <!-- NavBar -->
+  <header class="glass-navbar" id="navbar">
+    <span class="navbar-title" id="navbarTitle">Dashboard</span>
+    <div class="navbar-actions">
+      <button class="glass-btn glass-btn-ghost glass-btn-round" id="notifyBtn" aria-label="Notification demo">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Scrollable page content -->
+  <div class="page-content" id="pageContent">
+
+    <!-- Tab 1: Dashboard -->
+    <div class="tab-page active" id="page-home" data-title="Dashboard">
+      <div class="page-section stagger-in">
+        <!-- Hero -->
+        <div class="glass glass-2 hero-card glass-card">
+          <div class="hero-title">Mallette Resource Planning</div>
+          <div class="hero-subtitle">Plan. Assign. Optimize.</div>
+          <div class="hero-date" id="heroDate"></div>
+        </div>
+
+        <!-- Stats grid -->
+        <div class="stat-grid" style="margin-top:16px">
+          <div class="glass glass-1 stat-card glass-card glass-prismatic glass-card-interactive">
+            <div class="card-label">Available</div>
+            <div class="card-value" style="color:var(--accent)">47</div>
+            <div class="card-subtitle">Resources</div>
+          </div>
+          <div class="glass glass-1 stat-card glass-card glass-prismatic glass-card-interactive">
+            <div class="card-label">Active</div>
+            <div class="card-value">23</div>
+            <div class="card-subtitle">Projects</div>
+          </div>
+          <div class="glass glass-1 stat-card glass-card glass-prismatic glass-card-interactive">
+            <div class="card-label">This Week</div>
+            <div class="card-value">156</div>
+            <div class="card-subtitle">Assignments</div>
+          </div>
+          <div class="glass glass-1 stat-card glass-card glass-prismatic glass-card-interactive">
+            <div class="card-label">Utilization</div>
+            <div class="card-value">84%</div>
+            <div class="card-subtitle">Rate</div>
+          </div>
+        </div>
+
+        <!-- Upcoming availability -->
+        <div style="margin-top:20px">
+          <div class="section-title">Upcoming Availability</div>
+          <div class="glass-list">
+            <div class="glass-list-item">
+              <div class="list-item-avatar">SB</div>
+              <div class="list-item-content">
+                <div class="list-item-title">Sophie Bouchard</div>
+                <div class="list-item-subtitle">Senior Auditor &middot; Free Feb 20</div>
+              </div>
+              <span class="list-item-badge badge-available">Available</span>
+            </div>
+            <div class="glass-list-item">
+              <div class="list-item-avatar">MT</div>
+              <div class="list-item-content">
+                <div class="list-item-title">Marc Tremblay</div>
+                <div class="list-item-subtitle">Tax Consultant &middot; Free Feb 22</div>
+              </div>
+              <span class="list-item-badge badge-assigned">Wrapping Up</span>
+            </div>
+            <div class="glass-list-item">
+              <div class="list-item-avatar">JL</div>
+              <div class="list-item-content">
+                <div class="list-item-title">Julie Lavoie</div>
+                <div class="list-item-subtitle">CPA &middot; Free Feb 24</div>
+              </div>
+              <span class="list-item-badge badge-leave">On Leave</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Team -->
+    <div class="tab-page" id="page-team" data-title="Team">
+      <div class="page-section stagger-in">
+        <!-- Segmented control for offices -->
+        <div class="glass-segmented" id="officeSegmented" style="width:100%; display:flex">
+          <div class="segment-indicator" id="officeIndicator"></div>
+          <button class="segment-btn active" data-segment="all">All</button>
+          <button class="segment-btn" data-segment="montreal">Montreal</button>
+          <button class="segment-btn" data-segment="toronto">Toronto</button>
+          <button class="segment-btn" data-segment="vancouver">Vancouver</button>
+        </div>
+
+        <!-- Search -->
+        <div class="search-field" style="margin-top:12px">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="teamSearch" placeholder="Search team members..." autocomplete="off" />
+        </div>
+
+        <!-- Team list -->
+        <div class="glass-list" id="teamList" style="margin-top:12px">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Projects -->
+    <div class="tab-page" id="page-projects" data-title="Projects">
+      <div class="page-section stagger-in" id="projectsSection">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="section-title" style="margin-bottom:0">Active Projects</div>
+          <button class="glass-btn glass-btn-primary glass-btn-sm" id="newProjectBtn">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New
+          </button>
+        </div>
+
+        <div id="projectList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Sub-page: Project Detail -->
+      <div class="page-section" id="projectDetail" style="display:none">
+        <button class="glass-btn glass-btn-ghost glass-btn-sm back-btn" id="projectBackBtn">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
+        <div id="projectDetailContent"></div>
+      </div>
+    </div>
+
+    <!-- Tab 4: Settings -->
+    <div class="tab-page" id="page-settings" data-title="Settings">
+      <div class="page-section stagger-in">
+
+        <div class="section-title">Appearance</div>
+        <div class="glass glass-1 glass-card" style="padding:0; overflow:hidden">
+          <div class="settings-row">
+            <span class="settings-label">Dark Mode</span>
+            <div class="glass-toggle" id="themeToggle">
+              <div class="glass-toggle-thumb"></div>
+            </div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Accent Color</span>
+            <div class="accent-picker">
+              <div class="accent-swatch active" data-accent="blue"></div>
+              <div class="accent-swatch" data-accent="purple"></div>
+              <div class="accent-swatch" data-accent="teal"></div>
+              <div class="accent-swatch" data-accent="orange"></div>
+            </div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Background</span>
+            <div class="bg-picker" id="bgPicker">
+              <div class="bg-thumb bg-thumb-gradient active" data-bg="gradient" title="Gradient"></div>
+              <div class="bg-thumb" data-bg="glass" title="Liquid Glass" style="background-image:url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&q=60&fit=crop')"></div>
+            </div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Reduce Motion</span>
+            <div class="glass-toggle" id="motionToggle">
+              <div class="glass-toggle-thumb"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:20px">Planning</div>
+        <div class="glass glass-1 glass-card" style="padding:0; overflow:hidden">
+          <div class="settings-row">
+            <span class="settings-label">Cross-office Resources</span>
+            <div class="glass-toggle active" id="crossOfficeToggle">
+              <div class="glass-toggle-thumb"></div>
+            </div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Auto-assign Suggestions</span>
+            <div class="glass-toggle" id="autoAssignToggle">
+              <div class="glass-toggle-thumb"></div>
+            </div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Default Hours / Day</span>
+            <div class="glass-slider-wrap" style="flex:1 1 120px; max-width:160px; min-width:0">
+              <input type="range" class="glass-slider" id="hoursSlider" min="4" max="10" value="8" step="0.5" />
+              <span class="slider-value" id="hoursValue">8</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:20px">About</div>
+        <div class="glass glass-1 glass-card about-card">
+          <div class="card-title">Mallette Resource Planning</div>
+          <div class="card-subtitle">v0.1 &mdash; Liquid Glass UI</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TabBar -->
+  <nav class="glass-tabbar">
+    <div class="tabbar-inner" id="tabbarInner">
+      <div class="tab-pill" id="tabPill"></div>
+      <button class="tab-item active" data-tab="home" aria-label="Dashboard">
+        <svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="tab-item" data-tab="team" aria-label="Team">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Team</span>
+      </button>
+      <button class="tab-item" data-tab="projects" aria-label="Projects">
+        <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Projects</span>
+      </button>
+      <button class="tab-item" data-tab="settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<!-- Notification container -->
+<div class="notification-container" id="notificationContainer"></div>
+
+<!-- Sheet backdrop -->
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<!-- Sheet -->
+<div class="glass glass-3 glass-sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div id="sheetContent"></div>
+</div>
+
+<!-- Modal backdrop -->
+<div class="modal-backdrop" id="modalBackdrop"></div>
+<!-- Modal container -->
+<div class="modal-container" id="modalContainer">
+  <div class="glass glass-3 glass-modal" id="modal">
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- Context menu backdrop -->
+<div class="context-menu-backdrop" id="ctxBackdrop"></div>
+<!-- Context menu -->
+<div class="glass glass-3 glass-context-menu" id="ctxMenu">
+  <button class="context-menu-item" data-action="profile">
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    View Profile
+  </button>
+  <button class="context-menu-item" data-action="assign">
+    <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+    Assign to Project
+  </button>
+  <button class="context-menu-item" data-action="schedule">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    View Schedule
+  </button>
+  <div class="context-menu-divider"></div>
+  <button class="context-menu-item destructive" data-action="remove">
+    <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    Remove from Team
+  </button>
+</div>
+
+
+<script>
+/* ============================================
+   STEP 3: SPRING PHYSICS ENGINE
+   ============================================ */
+
+class Spring {
+  static SNAPPY = { stiffness: 300, damping: 24, mass: 1.0 };
+  static GENTLE = { stiffness: 150, damping: 20, mass: 1.0 };
+  static BOUNCY = { stiffness: 400, damping: 18, mass: 0.8 };
+
+  constructor(config = Spring.SNAPPY) {
+    this.stiffness = config.stiffness;
+    this.damping = config.damping;
+    this.mass = config.mass;
+  }
+
+  createAnimation() {
+    return {
+      displacement: 0,
+      velocity: 0,
+      target: 0,
+      current: 0,
+      done: true,
+    };
+  }
+}
+
+class SpringAnimator {
+  constructor() {
+    this._animations = new Map();
+    this._running = false;
+    this._lastTime = 0;
+    this._reducedMotion = false;
+    this._tick = this._tick.bind(this);
+  }
+
+  set reducedMotion(val) {
+    this._reducedMotion = val;
+  }
+
+  animate(id, spring, from, to, onUpdate, onComplete) {
+    if (this._reducedMotion) {
+      onUpdate(to);
+      if (onComplete) onComplete();
+      return;
+    }
+
+    const anim = {
+      spring,
+      current: from,
+      target: to,
+      velocity: 0,
+      onUpdate,
+      onComplete,
+      done: false,
+    };
+
+    this._animations.set(id, anim);
+
+    if (!this._running) {
+      this._running = true;
+      this._lastTime = performance.now();
+      requestAnimationFrame(this._tick);
+    }
+  }
+
+  stop(id) {
+    this._animations.delete(id);
+  }
+
+  _tick(now) {
+    let dt = (now - this._lastTime) / 1000;
+    this._lastTime = now;
+    // Clamp dt to avoid spiral of death
+    if (dt > 0.064) dt = 0.064;
+
+    const toRemove = [];
+
+    // Batch reads then writes
+    const updates = [];
+
+    for (const [id, anim] of this._animations) {
+      const { spring, target } = anim;
+      const displacement = anim.current - target;
+      const springForce = -displacement * spring.stiffness;
+      const dampingForce = -anim.velocity * spring.damping;
+      const acceleration = (springForce + dampingForce) / spring.mass;
+
+      anim.velocity += acceleration * dt;
+      anim.current += anim.velocity * dt;
+
+      // Completion check
+      if (Math.abs(anim.current - target) < 0.001 && Math.abs(anim.velocity) < 0.001) {
+        anim.current = target;
+        anim.velocity = 0;
+        anim.done = true;
+        toRemove.push(id);
+      }
+
+      updates.push(anim);
+    }
+
+    // Batch DOM writes
+    for (const anim of updates) {
+      anim.onUpdate(anim.current);
+    }
+
+    for (const id of toRemove) {
+      const anim = this._animations.get(id);
+      if (anim && anim.onComplete) anim.onComplete();
+      this._animations.delete(id);
+    }
+
+    if (this._animations.size > 0) {
+      requestAnimationFrame(this._tick);
+    } else {
+      this._running = false;
+    }
+  }
+}
+
+const springAnimator = new SpringAnimator();
+
+
+/* ============================================
+   STEP 4 & 7: COMPONENTS + DEMO APP
+   ============================================ */
+
+// ---- Data ----
+const TEAM_DATA = [
+  { id: 1, name: 'Sophie Bouchard', initials: 'SB', role: 'Senior Auditor', office: 'montreal', status: 'available', project: null },
+  { id: 2, name: 'Marc Tremblay', initials: 'MT', role: 'Tax Consultant', office: 'montreal', status: 'assigned', project: 'Deloitte Tax Audit' },
+  { id: 3, name: 'Julie Lavoie', initials: 'JL', role: 'CPA', office: 'toronto', status: 'leave', project: null },
+  { id: 4, name: 'Alexandre Gagnon', initials: 'AG', role: 'Audit Manager', office: 'montreal', status: 'assigned', project: 'BNC Year-End' },
+  { id: 5, name: 'Emily Chen', initials: 'EC', role: 'Tax Specialist', office: 'vancouver', status: 'available', project: null },
+  { id: 6, name: 'Philippe Dubois', initials: 'PD', role: 'Advisory', office: 'toronto', status: 'assigned', project: 'Hydro-Qu\u00e9bec Advisory' },
+  { id: 7, name: 'Camille Roy', initials: 'CR', role: 'Staff Auditor', office: 'montreal', status: 'available', project: null },
+  { id: 8, name: 'David Kim', initials: 'DK', role: 'Tax Manager', office: 'vancouver', status: 'assigned', project: 'Pacific Rim Holdings' },
+  { id: 9, name: 'Isabelle Morin', initials: 'IM', role: 'Senior CPA', office: 'toronto', status: 'available', project: null },
+  { id: 10, name: 'Luc Bergeron', initials: 'LB', role: 'IT Auditor', office: 'montreal', status: 'leave', project: null },
+];
+
+const PROJECT_DATA = [
+  { id: 1, name: 'Year-End Audit', client: 'BNC Financial', progress: 72, teamCount: 5, hours: 480 },
+  { id: 2, name: 'Tax Compliance Review', client: 'Deloitte Partners', progress: 45, teamCount: 3, hours: 320 },
+  { id: 3, name: 'Advisory Services', client: 'Hydro-Qu\u00e9bec', progress: 88, teamCount: 4, hours: 200 },
+  { id: 4, name: 'Transfer Pricing', client: 'Pacific Rim Holdings', progress: 30, teamCount: 2, hours: 560 },
+  { id: 5, name: 'Internal Controls Audit', client: 'Bombardier Inc.', progress: 15, teamCount: 6, hours: 640 },
+];
+
+// ---- State ----
+let currentTab = 'home';
+let currentOffice = 'all';
+let contextTarget = null;
+
+// ---- DOM Refs ----
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => [...document.querySelectorAll(sel)];
+
+const navbar = $('#navbar');
+const navbarTitle = $('#navbarTitle');
+const pageContent = $('#pageContent');
+const tabPill = $('#tabPill');
+const tabbarInner = $('#tabbarInner');
+
+// ---- Hero date ----
+const now = new Date();
+$('#heroDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+
+// ---- Scroll-aware navbar ----
+pageContent.addEventListener('scroll', () => {
+  if (pageContent.scrollTop > 10) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+
+// ---- Tab Bar ----
+function positionTabPill(animate = true) {
+  const activeTab = $(`.tab-item[data-tab="${currentTab}"]`);
+  if (!activeTab) return;
+  const rect = activeTab.getBoundingClientRect();
+  const parentRect = tabbarInner.getBoundingClientRect();
+  const pillPad = 10; // extra breathing room around tab item
+  const targetLeft = rect.left - parentRect.left - pillPad;
+  const targetWidth = rect.width + pillPad * 2;
+
+  if (animate) {
+    const currentLeft = parseFloat(tabPill.style.left) || targetLeft;
+    const currentWidth = parseFloat(tabPill.style.width) || targetWidth;
+
+    // Stretch effect during travel
+    const distance = Math.abs(targetLeft - currentLeft);
+    const stretch = Math.min(distance / 200, 0.15);
+
+    springAnimator.animate(
+      'tab-pill-left',
+      new Spring(Spring.SNAPPY),
+      currentLeft,
+      targetLeft,
+      (val) => { tabPill.style.left = val + 'px'; }
+    );
+    springAnimator.animate(
+      'tab-pill-width',
+      new Spring({ stiffness: 250, damping: 22, mass: 1 }),
+      currentWidth * (1 + stretch),
+      targetWidth,
+      (val) => { tabPill.style.width = val + 'px'; }
+    );
+  } else {
+    tabPill.style.left = targetLeft + 'px';
+    tabPill.style.width = targetWidth + 'px';
+  }
+}
+
+function switchTab(tab) {
+  if (tab === currentTab) return;
+
+  // Update tabs
+  $$('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+
+  // Switch page
+  const oldPage = $(`#page-${currentTab}`);
+  const newPage = $(`#page-${tab}`);
+
+  currentTab = tab;
+
+  // View transition
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      if (oldPage) oldPage.classList.remove('active');
+      if (newPage) newPage.classList.add('active');
+      navbarTitle.textContent = newPage?.dataset.title || '';
+      pageContent.scrollTop = 0;
+    });
+  } else {
+    if (oldPage) oldPage.classList.remove('active');
+    if (newPage) newPage.classList.add('active');
+    navbarTitle.textContent = newPage?.dataset.title || '';
+    pageContent.scrollTop = 0;
+  }
+
+  positionTabPill(true);
+
+  // Reset project detail view
+  if (tab === 'projects') {
+    showProjectsList();
+  }
+}
+
+$$('.tab-item').forEach(tab => {
+  tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+});
+
+// Initial pill position after layout
+requestAnimationFrame(() => {
+  positionTabPill(false);
+});
+window.addEventListener('resize', () => positionTabPill(false));
+
+
+// ---- GlassButton interactions ----
+function initButtonInteractions() {
+  document.addEventListener('pointerdown', (e) => {
+    const btn = e.target.closest('.glass-btn');
+    if (!btn) return;
+
+    const rect = btn.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    btn.style.setProperty('--click-x', x + '%');
+    btn.style.setProperty('--click-y', y + '%');
+    btn.classList.add('glow');
+
+    // Spring press
+    const id = 'btn-' + (btn.id || Math.random());
+    springAnimator.animate(id, new Spring(Spring.SNAPPY), 1, 0.97, (val) => {
+      btn.style.transform = `scale(${val})`;
+    });
+  });
+
+  document.addEventListener('pointerup', (e) => {
+    const btn = e.target.closest('.glass-btn');
+    if (!btn) return;
+
+    const id = 'btn-' + (btn.id || Math.random());
+    springAnimator.animate(id, new Spring(Spring.BOUNCY), 0.97, 1, (val) => {
+      btn.style.transform = `scale(${val})`;
+    }, () => {
+      btn.style.transform = '';
+    });
+
+    setTimeout(() => btn.classList.remove('glow'), 300);
+  });
+}
+initButtonInteractions();
+
+
+// ---- GlassCard interactions ----
+function initCardInteractions() {
+  document.addEventListener('pointerdown', (e) => {
+    const card = e.target.closest('.glass-card-interactive');
+    if (!card) return;
+    const id = 'card-' + (card.id || Math.random());
+    springAnimator.animate(id, new Spring(Spring.SNAPPY), 1, 0.97, (val) => {
+      card.style.transform = `scale(${val})`;
+    });
+  });
+
+  document.addEventListener('pointerup', (e) => {
+    const card = e.target.closest('.glass-card-interactive');
+    if (!card) return;
+    const id = 'card-' + (card.id || Math.random());
+    springAnimator.animate(id, new Spring(Spring.BOUNCY), 0.97, 1, (val) => {
+      card.style.transform = `scale(${val})`;
+    }, () => {
+      card.style.transform = '';
+    });
+  });
+
+  // Hover lift for cards (desktop)
+  document.addEventListener('pointerenter', (e) => {
+    if (e.pointerType === 'touch') return;
+    const card = e.target.closest?.('.glass-card-interactive');
+    if (!card) return;
+    const id = 'card-hover-' + (card.id || Math.random());
+    springAnimator.animate(id, new Spring(Spring.GENTLE), 0, -4, (val) => {
+      card.style.transform = `translateY(${val}px) scale(1.015)`;
+    });
+  }, true);
+
+  document.addEventListener('pointerleave', (e) => {
+    if (e.pointerType === 'touch') return;
+    const card = e.target.closest?.('.glass-card-interactive');
+    if (!card) return;
+    const id = 'card-hover-' + (card.id || Math.random());
+    springAnimator.animate(id, new Spring(Spring.GENTLE), -4, 0, (val) => {
+      card.style.transform = `translateY(${val}px) scale(${1.015 + val / 267})`;
+    }, () => {
+      card.style.transform = '';
+    });
+  }, true);
+}
+initCardInteractions();
+
+
+// ---- GlassToggle ----
+function initToggle(el, onChange) {
+  const thumb = el.querySelector('.glass-toggle-thumb');
+  const isActive = () => el.classList.contains('active');
+
+  function updateThumb(active, animate = true) {
+    const targetX = active ? 21 : 0;
+    if (animate) {
+      springAnimator.animate(
+        'toggle-' + el.id,
+        new Spring(Spring.SNAPPY),
+        active ? 0 : 21,
+        targetX,
+        (val) => { thumb.style.transform = `translateX(${val}px)`; }
+      );
+    } else {
+      thumb.style.transform = `translateX(${targetX}px)`;
+    }
+  }
+
+  // Set initial position
+  updateThumb(isActive(), false);
+
+  el.addEventListener('click', () => {
+    const newState = !isActive();
+    el.classList.toggle('active', newState);
+    updateThumb(newState, true);
+    if (onChange) onChange(newState);
+  });
+}
+
+// Theme toggle
+initToggle($('#themeToggle'), (dark) => {
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+});
+
+// Motion toggle
+initToggle($('#motionToggle'), (reduced) => {
+  springAnimator.reducedMotion = reduced;
+  document.documentElement.style.setProperty('--motion-duration', reduced ? '0.01ms' : '');
+});
+
+// Cross-office toggle
+initToggle($('#crossOfficeToggle'));
+initToggle($('#autoAssignToggle'));
+
+
+// ---- GlassSlider ----
+const hoursSlider = $('#hoursSlider');
+const hoursValue = $('#hoursValue');
+hoursSlider.addEventListener('input', () => {
+  hoursValue.textContent = hoursSlider.value;
+});
+// Style filled portion
+function updateSliderFill(slider) {
+  const pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+  slider.style.background = `linear-gradient(90deg, var(--accent) ${pct}%, rgba(var(--glass-bg-rgb), 0.3) ${pct}%)`;
+}
+hoursSlider.addEventListener('input', () => updateSliderFill(hoursSlider));
+updateSliderFill(hoursSlider);
+
+
+// ---- Accent color picker ----
+$$('.accent-swatch').forEach(swatch => {
+  swatch.addEventListener('click', () => {
+    $$('.accent-swatch').forEach(s => s.classList.remove('active'));
+    swatch.classList.add('active');
+    document.documentElement.dataset.accent = swatch.dataset.accent;
+    // Re-update slider fill
+    updateSliderFill(hoursSlider);
+    // Re-position tab pill to pick up color change
+    positionTabPill(false);
+  });
+});
+
+
+// ---- Background picker ----
+const BG_PHOTOS = {
+  glass: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1400&q=85&fit=crop',
+};
+
+const appBg = $('#appBg');
+const appBgPhoto = $('#appBgPhoto');
+
+$$('.bg-thumb').forEach(thumb => {
+  thumb.addEventListener('click', () => {
+    $$('.bg-thumb').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+
+    const key = thumb.dataset.bg;
+
+    if (key === 'gradient') {
+      // Show gradient, hide photo
+      appBg.style.opacity = '1';
+      appBgPhoto.classList.remove('active');
+    } else {
+      // Load full-res photo, show it, dim gradient
+      appBgPhoto.style.backgroundImage = `url('${BG_PHOTOS[key]}')`;
+      appBgPhoto.classList.add('active');
+      appBg.style.opacity = '0';
+    }
+  });
+});
+
+
+// ---- GlassSegmentedControl ----
+function initSegmented(container, onChange) {
+  const indicator = container.querySelector('.segment-indicator');
+  const buttons = [...container.querySelectorAll('.segment-btn')];
+
+  function updateIndicator(btn, animate = true) {
+    const rect = btn.getBoundingClientRect();
+    const parentRect = container.getBoundingClientRect();
+    const targetLeft = rect.left - parentRect.left;
+    const targetWidth = rect.width;
+
+    if (animate) {
+      const currentLeft = parseFloat(indicator.style.left) || targetLeft;
+      const currentWidth = parseFloat(indicator.style.width) || targetWidth;
+      const distance = Math.abs(targetLeft - currentLeft);
+      const stretch = Math.min(distance / 150, 0.2);
+
+      // Glow during travel
+      indicator.style.boxShadow =
+        '0 2px 12px rgba(0,0,0,0.06), 0 0.5px 1px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 0 12px rgba(255,255,255,0.06), 0 0 16px rgba(var(--accent-rgb), 0.08)';
+
+      // Slide left with bounce
+      springAnimator.animate(
+        'seg-' + container.id + '-left',
+        new Spring(Spring.BOUNCY),
+        currentLeft,
+        targetLeft,
+        (val) => { indicator.style.left = val + 'px'; }
+      );
+      // Width: stretch out then settle
+      springAnimator.animate(
+        'seg-' + container.id + '-width',
+        new Spring({ stiffness: 280, damping: 20, mass: 0.9 }),
+        currentWidth * (1 + stretch),
+        targetWidth,
+        (val) => { indicator.style.width = val + 'px'; },
+        () => { indicator.style.boxShadow = ''; }
+      );
+    } else {
+      indicator.style.left = targetLeft + 'px';
+      indicator.style.width = targetWidth + 'px';
+    }
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateIndicator(btn, true);
+      if (onChange) onChange(btn.dataset.segment);
+    });
+  });
+
+  // Initial
+  const active = container.querySelector('.segment-btn.active');
+  if (active) {
+    requestAnimationFrame(() => updateIndicator(active, false));
+  }
+}
+
+initSegmented($('#officeSegmented'), (office) => {
+  currentOffice = office;
+  renderTeamList();
+});
+
+
+// ---- Team list ----
+function renderTeamList() {
+  const search = ($('#teamSearch')?.value || '').toLowerCase();
+  const list = $('#teamList');
+
+  const filtered = TEAM_DATA.filter(m => {
+    if (currentOffice !== 'all' && m.office !== currentOffice) return false;
+    if (search && !m.name.toLowerCase().includes(search) && !m.role.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  list.innerHTML = filtered.map(m => {
+    const badgeClass = m.status === 'available' ? 'badge-available' : m.status === 'assigned' ? 'badge-assigned' : 'badge-leave';
+    const badgeLabel = m.status === 'available' ? 'Available' : m.status === 'assigned' ? 'Assigned' : 'On Leave';
+    const subtitle = m.project ? `${m.role} \u00b7 ${m.project}` : `${m.role} \u00b7 ${m.office.charAt(0).toUpperCase() + m.office.slice(1)}`;
+
+    return `
+      <div class="glass-list-item" data-member-id="${m.id}" data-context-target>
+        <div class="list-item-avatar">${m.initials}</div>
+        <div class="list-item-content">
+          <div class="list-item-title">${m.name}</div>
+          <div class="list-item-subtitle">${subtitle}</div>
+        </div>
+        <span class="list-item-badge ${badgeClass}">${badgeLabel}</span>
+      </div>
+    `;
+  }).join('');
+
+  // Stagger animation
+  const items = list.querySelectorAll('.glass-list-item');
+  items.forEach((item, i) => {
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(12px)';
+    setTimeout(() => {
+      springAnimator.animate(
+        'team-item-' + i,
+        new Spring(Spring.GENTLE),
+        12, 0,
+        (val) => {
+          item.style.transform = `translateY(${val}px)`;
+          item.style.opacity = String(1 - val / 12);
+        },
+        () => {
+          item.style.opacity = '1';
+          item.style.transform = '';
+        }
+      );
+    }, i * 30);
+  });
+
+  // Click handler for items
+  list.querySelectorAll('.glass-list-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      if (e.button !== 0) return;
+      const id = parseInt(item.dataset.memberId);
+      openMemberSheet(id);
+    });
+
+    // Context menu
+    item.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      const id = parseInt(item.dataset.memberId);
+      contextTarget = TEAM_DATA.find(m => m.id === id);
+      showContextMenu(e.clientX, e.clientY);
+    });
+  });
+}
+
+$('#teamSearch')?.addEventListener('input', renderTeamList);
+renderTeamList();
+
+
+// ---- Project list ----
+function renderProjectList() {
+  const container = $('#projectList');
+  container.innerHTML = PROJECT_DATA.map(p => `
+    <div class="glass glass-1 glass-card glass-card-interactive" data-project-id="${p.id}" style="margin-bottom:12px">
+      <div class="card-title">${p.name}</div>
+      <div class="card-subtitle">${p.client}</div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${p.progress}%"></div>
+      </div>
+      <div class="project-meta">
+        <div class="project-meta-item">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          ${p.teamCount} members
+        </div>
+        <div class="project-meta-item">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          ${p.hours}h
+        </div>
+        <div class="project-meta-item" style="margin-left:auto; font-weight:600; color:var(--accent)">
+          ${p.progress}%
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Stagger
+  const items = container.querySelectorAll('.glass-card');
+  items.forEach((item, i) => {
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(12px)';
+    setTimeout(() => {
+      springAnimator.animate(
+        'proj-item-' + i,
+        new Spring(Spring.GENTLE),
+        12, 0,
+        (val) => {
+          item.style.transform = `translateY(${val}px)`;
+          item.style.opacity = String(1 - val / 12);
+        },
+        () => {
+          item.style.opacity = '1';
+          item.style.transform = '';
+        }
+      );
+    }, i * 40);
+  });
+
+  // Click → project detail
+  container.querySelectorAll('.glass-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = parseInt(card.dataset.projectId);
+      showProjectDetail(id);
+    });
+  });
+}
+renderProjectList();
+
+
+// ---- Project Detail ----
+function showProjectDetail(id) {
+  const project = PROJECT_DATA.find(p => p.id === id);
+  if (!project) return;
+
+  const assigned = TEAM_DATA.filter(m => m.status === 'assigned').slice(0, project.teamCount);
+
+  const detail = $('#projectDetail');
+  const section = $('#projectsSection');
+  const content = $('#projectDetailContent');
+
+  content.innerHTML = `
+    <div class="glass glass-2 glass-card" style="margin-bottom:16px">
+      <div class="card-label">${project.client}</div>
+      <div class="card-title" style="font-size:20px; margin-top:4px">${project.name}</div>
+      <div class="progress-bar" style="margin-top:12px">
+        <div class="progress-fill" style="width:${project.progress}%"></div>
+      </div>
+      <div class="project-meta" style="margin-top:8px">
+        <div class="project-meta-item">Progress: <strong style="color:var(--accent);margin-left:4px">${project.progress}%</strong></div>
+        <div class="project-meta-item" style="margin-left:auto">${project.hours}h budgeted</div>
+      </div>
+    </div>
+
+    <div class="section-title">Assigned Team</div>
+    <div class="glass-list">
+      ${assigned.map(m => `
+        <div class="glass-list-item">
+          <div class="list-item-avatar">${m.initials}</div>
+          <div class="list-item-content">
+            <div class="list-item-title">${m.name}</div>
+            <div class="list-item-subtitle">${m.role}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      section.style.display = 'none';
+      detail.style.display = 'block';
+    });
+  } else {
+    section.style.display = 'none';
+    detail.style.display = 'block';
+  }
+
+  navbarTitle.textContent = project.name;
+}
+
+function showProjectsList() {
+  const detail = $('#projectDetail');
+  const section = $('#projectsSection');
+
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      detail.style.display = 'none';
+      section.style.display = 'block';
+    });
+  } else {
+    detail.style.display = 'none';
+    section.style.display = 'block';
+  }
+
+  navbarTitle.textContent = 'Projects';
+}
+
+$('#projectBackBtn').addEventListener('click', showProjectsList);
+
+
+// ---- New Project Modal ----
+$('#newProjectBtn').addEventListener('click', openNewProjectModal);
+
+function openNewProjectModal() {
+  const backdrop = $('#modalBackdrop');
+  const modal = $('#modal');
+  const content = $('#modalContent');
+
+  content.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">New Project</div>
+      <button class="glass-btn glass-btn-ghost glass-btn-round" id="modalClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="form-grid">
+      <div class="glass-textfield">
+        <input type="text" placeholder=" " id="projectNameInput" />
+        <label>Project Name</label>
+      </div>
+      <div class="glass-textfield">
+        <input type="text" placeholder=" " id="clientNameInput" />
+        <label>Client</label>
+      </div>
+      <div class="settings-row" style="padding:0">
+        <span class="settings-label">Estimated Hours</span>
+        <div class="glass-slider-wrap" style="flex:1 1 120px; max-width:160px; min-width:0">
+          <input type="range" class="glass-slider" id="estHoursSlider" min="40" max="800" value="200" step="20" />
+          <span class="slider-value" id="estHoursValue">200</span>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="glass-btn" id="modalCancelBtn">Cancel</button>
+        <button class="glass-btn glass-btn-primary" id="modalCreateBtn">Create Project</button>
+      </div>
+    </div>
+  `;
+
+  // Show modal
+  backdrop.classList.add('visible');
+
+  // Spring modal in
+  springAnimator.animate('modal-y', new Spring(Spring.GENTLE), 40, 0, (val) => {
+    modal.style.transform = `translateY(${val}px) scale(${0.95 + 0.05 * (1 - val / 40)})`;
+    modal.style.opacity = String(1 - val / 40);
+  });
+
+  // Push-back effect on app
+  const app = $('#app');
+  springAnimator.animate('modal-pushback', new Spring(Spring.GENTLE), 1, 0.94, (val) => {
+    app.style.transform = `scale(${val})`;
+    app.style.filter = `blur(${(1 - val) * 60}px)`;
+  });
+
+  // Slider
+  const estSlider = $('#estHoursSlider');
+  const estValue = $('#estHoursValue');
+  estSlider?.addEventListener('input', () => {
+    estValue.textContent = estSlider.value;
+    updateSliderFill(estSlider);
+  });
+  if (estSlider) updateSliderFill(estSlider);
+
+  // Close handlers
+  const closeModal = () => {
+    springAnimator.animate('modal-y', new Spring(Spring.SNAPPY), 0, 40, (val) => {
+      modal.style.transform = `translateY(${val}px) scale(${0.95 + 0.05 * (1 - val / 40)})`;
+      modal.style.opacity = String(1 - val / 40);
+    }, () => {
+      backdrop.classList.remove('visible');
+      modal.style.transform = '';
+      modal.style.opacity = '';
+    });
+
+    springAnimator.animate('modal-pushback', new Spring(Spring.GENTLE), 0.94, 1, (val) => {
+      app.style.transform = `scale(${val})`;
+      app.style.filter = val >= 0.999 ? '' : `blur(${(1 - val) * 60}px)`;
+    }, () => {
+      app.style.transform = '';
+      app.style.filter = '';
+    });
+  };
+
+  $('#modalClose')?.addEventListener('click', closeModal);
+  $('#modalCancelBtn')?.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal, { once: true });
+
+  // Create
+  $('#modalCreateBtn')?.addEventListener('click', () => {
+    const name = $('#projectNameInput')?.value;
+    const client = $('#clientNameInput')?.value;
+    const hours = parseInt($('#estHoursSlider')?.value || '200');
+
+    if (name && client) {
+      PROJECT_DATA.push({
+        id: PROJECT_DATA.length + 1,
+        name, client,
+        progress: 0,
+        teamCount: 0,
+        hours,
+      });
+      renderProjectList();
+      showNotification('Project Created', `${name} for ${client} has been created.`);
+    }
+    closeModal();
+  });
+}
+
+
+// ---- Member Sheet ----
+function openMemberSheet(id) {
+  const member = TEAM_DATA.find(m => m.id === id);
+  if (!member) return;
+
+  const sheet = $('#sheet');
+  const backdrop = $('#sheetBackdrop');
+  const content = $('#sheetContent');
+
+  content.innerHTML = `
+    <div class="profile-header">
+      <div class="profile-avatar">${member.initials}</div>
+      <div class="profile-info">
+        <div class="profile-name">${member.name}</div>
+        <div class="profile-role">${member.role}</div>
+      </div>
+    </div>
+    <div class="profile-details">
+      <div class="profile-detail-row">
+        <span class="profile-detail-label">Office</span>
+        <span class="profile-detail-value">${member.office.charAt(0).toUpperCase() + member.office.slice(1)}</span>
+      </div>
+      <div class="profile-detail-row">
+        <span class="profile-detail-label">Status</span>
+        <span class="profile-detail-value">${member.status === 'available' ? 'Available' : member.status === 'assigned' ? 'Assigned' : 'On Leave'}</span>
+      </div>
+      <div class="profile-detail-row">
+        <span class="profile-detail-label">Current Project</span>
+        <span class="profile-detail-value">${member.project || 'None'}</span>
+      </div>
+    </div>
+    <div style="margin-top:16px; display:flex; gap:10px">
+      <button class="glass-btn glass-btn-primary" style="flex:1" onclick="closeSheet(); showNotification('Assigned', '${member.name} assigned to project.')">Assign to Project</button>
+      <button class="glass-btn" style="flex:1" onclick="closeSheet()">Close</button>
+    </div>
+  `;
+
+  openSheet();
+}
+
+
+// ---- Sheet management ----
+let sheetDragY = 0;
+let sheetDragStart = 0;
+let sheetVelocity = 0;
+let sheetLastY = 0;
+let sheetLastTime = 0;
+let sheetIsDragging = false;
+
+function openSheet() {
+  const sheet = $('#sheet');
+  const backdrop = $('#sheetBackdrop');
+
+  backdrop.classList.add('visible');
+
+  springAnimator.animate('sheet-y', new Spring(Spring.GENTLE), 40, 0, (val) => {
+    sheet.style.transform = `translate(-50%, -50%) translateY(${val}px) scale(${0.95 + 0.05 * (1 - val / 40)})`;
+    sheet.style.opacity = String(Math.min(1, 1 - val / 40));
+  }, () => {
+    sheet.classList.add('visible');
+    sheet.style.transform = '';
+    sheet.style.opacity = '';
+  });
+}
+
+function closeSheet() {
+  const sheet = $('#sheet');
+  const backdrop = $('#sheetBackdrop');
+
+  backdrop.classList.remove('visible');
+
+  springAnimator.animate('sheet-y', new Spring(Spring.SNAPPY), 0, 40, (val) => {
+    sheet.style.transform = `translate(-50%, -50%) translateY(${val}px) scale(${0.95 + 0.05 * (1 - val / 40)})`;
+    sheet.style.opacity = String(Math.max(0, 1 - val / 40));
+  }, () => {
+    sheet.classList.remove('visible');
+    sheet.style.transform = '';
+    sheet.style.opacity = '0';
+  });
+}
+
+// Sheet drag
+const sheetEl = $('#sheet');
+const sheetHandle = sheetEl.querySelector('.sheet-handle');
+
+sheetHandle.addEventListener('pointerdown', (e) => {
+  sheetIsDragging = true;
+  sheetDragStart = e.clientY;
+  sheetLastY = e.clientY;
+  sheetLastTime = performance.now();
+  sheetVelocity = 0;
+  sheetHandle.setPointerCapture(e.pointerId);
+});
+
+sheetHandle.addEventListener('pointermove', (e) => {
+  if (!sheetIsDragging) return;
+  const dy = e.clientY - sheetDragStart;
+  const now = performance.now();
+  const dt = now - sheetLastTime;
+  if (dt > 0) {
+    sheetVelocity = (e.clientY - sheetLastY) / dt * 1000;
+  }
+  sheetLastY = e.clientY;
+  sheetLastTime = now;
+
+  // Rubber band at top (negative dy)
+  if (dy < 0) {
+    const rubber = dy * 0.3;
+    sheetEl.style.transform = `translate(-50%, -50%) translateY(${rubber}px)`;
+  } else {
+    sheetEl.style.transform = `translate(-50%, -50%) translateY(${dy}px)`;
+  }
+});
+
+sheetHandle.addEventListener('pointerup', (e) => {
+  if (!sheetIsDragging) return;
+  sheetIsDragging = false;
+
+  const dy = e.clientY - sheetDragStart;
+
+  // Fling detection
+  if (sheetVelocity > 500 || dy > 150) {
+    closeSheet();
+  } else {
+    // Snap back
+    springAnimator.animate('sheet-snapback', new Spring(Spring.BOUNCY), dy, 0, (val) => {
+      sheetEl.style.transform = `translate(-50%, -50%) translateY(${val}px)`;
+    }, () => {
+      sheetEl.style.transform = '';
+    });
+  }
+});
+
+$('#sheetBackdrop').addEventListener('click', closeSheet);
+
+
+// ---- Notifications ----
+function showNotification(title, body, duration = 4000) {
+  const container = $('#notificationContainer');
+  const el = document.createElement('div');
+  el.className = 'glass glass-3 glass-notification';
+  el.innerHTML = `
+    <div class="notification-content">
+      <div class="notification-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="notification-text">
+        <div class="notification-title">${title}</div>
+        <div class="notification-body">${body}</div>
+      </div>
+    </div>
+    <div class="notification-progress">
+      <div class="notification-progress-bar" style="width:100%"></div>
+    </div>
+  `;
+
+  container.appendChild(el);
+
+  // Spring in
+  requestAnimationFrame(() => {
+    springAnimator.animate('notif-in-' + Date.now(), new Spring(Spring.BOUNCY), -20, 0, (val) => {
+      el.style.transform = `translateY(${val}px) scale(${0.95 + 0.05 * (1 + val / 20)})`;
+      el.style.opacity = String(1 + val / 20);
+    }, () => {
+      el.classList.add('visible');
+      el.style.transform = '';
+      el.style.opacity = '';
+    });
+  });
+
+  // Progress bar
+  const bar = el.querySelector('.notification-progress-bar');
+  bar.style.transition = `width ${duration}ms linear`;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      bar.style.width = '0%';
+    });
+  });
+
+  // Auto-dismiss
+  const dismiss = () => {
+    const id = 'notif-out-' + Date.now();
+    springAnimator.animate(id, new Spring(Spring.SNAPPY), 0, -30, (val) => {
+      el.style.transform = `translateY(${val}px)`;
+      el.style.opacity = String(1 + val / 30);
+    }, () => {
+      el.remove();
+    });
+  };
+
+  setTimeout(dismiss, duration);
+  el.addEventListener('click', dismiss);
+}
+
+// Notification demo button
+$('#notifyBtn').addEventListener('click', () => {
+  showNotification(
+    'New Assignment',
+    'Alice Martin assigned to Deloitte Tax Audit'
+  );
+});
+
+
+// ---- Context Menu ----
+function showContextMenu(x, y) {
+  const backdrop = $('#ctxBackdrop');
+  const menu = $('#ctxMenu');
+
+  // Position
+  const menuWidth = 220;
+  const menuHeight = 200;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  let left = x;
+  let top = y;
+  if (left + menuWidth > vw) left = vw - menuWidth - 8;
+  if (top + menuHeight > vh) top = vh - menuHeight - 8;
+
+  menu.style.left = left + 'px';
+  menu.style.top = top + 'px';
+  menu.style.transformOrigin = `${x - left}px ${y - top}px`;
+
+  backdrop.classList.add('visible');
+
+  springAnimator.animate('ctx-scale', new Spring(Spring.SNAPPY), 0.8, 1, (val) => {
+    menu.style.transform = `scale(${val})`;
+    menu.style.opacity = String((val - 0.8) / 0.2);
+  }, () => {
+    menu.classList.add('visible');
+    menu.style.transform = '';
+    menu.style.opacity = '';
+  });
+}
+
+function hideContextMenu() {
+  const backdrop = $('#ctxBackdrop');
+  const menu = $('#ctxMenu');
+
+  backdrop.classList.remove('visible');
+
+  springAnimator.animate('ctx-scale', new Spring(Spring.SNAPPY), 1, 0.8, (val) => {
+    menu.style.transform = `scale(${val})`;
+    menu.style.opacity = String((val - 0.8) / 0.2);
+  }, () => {
+    menu.classList.remove('visible');
+    menu.style.transform = 'scale(0.8)';
+    menu.style.opacity = '0';
+  });
+
+  contextTarget = null;
+}
+
+$('#ctxBackdrop').addEventListener('click', hideContextMenu);
+
+$$('.context-menu-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const action = item.dataset.action;
+    if (contextTarget) {
+      if (action === 'profile') {
+        openMemberSheet(contextTarget.id);
+      } else if (action === 'assign') {
+        showNotification('Assigned', `${contextTarget.name} has been assigned.`);
+      } else if (action === 'schedule') {
+        showNotification('Schedule', `Viewing schedule for ${contextTarget.name}.`);
+      }
+    }
+    hideContextMenu();
+  });
+});
+
+
+// ---- Prevent default context menu on team list ----
+$('#teamList')?.addEventListener('contextmenu', (e) => e.preventDefault());
+
+
+// ---- Initial reduced motion check ----
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  springAnimator.reducedMotion = true;
+}
+
+// ---- Clean up on visibility change (stop wasting cycles when hidden) ----
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    // Animations will naturally stop when RAF isn't called
+  }
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Planning - Modern Solution Architecture</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            color: #1a1a2e;
+            background: #fafbfc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin: 40px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #334155;
+            margin: 25px 0 12px 0;
+        }
+
+        /* Clean Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        tr:hover { background: #f8fafc; }
+
+        /* Cards */
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+        .card-desc {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 2px 4px 2px 0;
+        }
+        .tag.green { background: #dcfce7; color: #166534; }
+        .tag.purple { background: #f3e8ff; color: #7c3aed; }
+        .tag.orange { background: #ffedd5; color: #c2410c; }
+
+        /* Stack Grid */
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .stack-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .stack-item h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .stack-item .tech {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .stack-item .why {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        /* Lists */
+        ul { margin: 12px 0 12px 20px; }
+        li { margin: 6px 0; }
+
+        /* Code */
+        code {
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Divider */
+        hr {
+            border: none;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 40px 0;
+        }
+
+        /* Links */
+        a { color: #2563eb; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Recommended badge */
+        .recommended {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 10px;
+        }
+
+        /* Print */
+        @media print {
+            body { padding: 20px; background: white; }
+            .card { box-shadow: none; border: 1px solid #ddd; }
+            .stack-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Mallette Resource Planning</h1>
+<p class="subtitle">Enterprise Architecture for Professional Services Scheduling</p>
+
+<div class="card" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-color: #0ea5e9;">
+    <div class="card-title" style="color: #0369a1;">Scale Requirements</div>
+    <div class="card-desc">
+        <strong>1,600 experts</strong> across <strong>40+ offices</strong> — requires enterprise-grade backend infrastructure with proper multi-tenancy, role-based access control, and high availability.
+    </div>
+</div>
+
+<h2>Requirements</h2>
+<table>
+    <tr>
+        <th style="width:30%">Requirement</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><strong>Resources</strong></td>
+        <td>1,600+ staff members (accountants, advisors) with roles, skills, hourly rates, and office assignments</td>
+    </tr>
+    <tr>
+        <td><strong>Multi-Office</strong></td>
+        <td>40+ offices with regional groupings; cross-office resource sharing and visibility controls</td>
+    </tr>
+    <tr>
+        <td><strong>Projects & Tasks</strong></td>
+        <td>Client engagements with tasks that have estimated hours (level of effort)</td>
+    </tr>
+    <tr>
+        <td><strong>Assignments</strong></td>
+        <td>One resource per task at a time; auto-calculate end date from effort</td>
+    </tr>
+    <tr>
+        <td><strong>Planning</strong></td>
+        <td>Schedule future work based on projected availability across offices</td>
+    </tr>
+    <tr>
+        <td><strong>Visibility</strong></td>
+        <td>Timeline/Gantt view with office/region filtering; executive dashboards</td>
+    </tr>
+    <tr>
+        <td><strong>Security</strong></td>
+        <td>Role-based access control, audit logging, SSO integration (Azure AD/Okta)</td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Recommended Tech Stack <span class="recommended">Enterprise 2026</span></h2>
+
+<div class="stack-grid">
+    <div class="stack-item">
+        <h4>Frontend Framework</h4>
+        <div class="tech">Next.js 15 + React 19</div>
+        <div class="why">Server components, App Router, TypeScript native</div>
+    </div>
+    <div class="stack-item">
+        <h4>Styling</h4>
+        <div class="tech">Tailwind CSS + shadcn/ui</div>
+        <div class="why">Rapid UI development, consistent design system</div>
+    </div>
+    <div class="stack-item">
+        <h4>Backend API</h4>
+        <div class="tech">NestJS (Node.js)</div>
+        <div class="why">Enterprise-grade, TypeScript, modular architecture, OpenAPI</div>
+    </div>
+    <div class="stack-item">
+        <h4>Database</h4>
+        <div class="tech">PostgreSQL (managed)</div>
+        <div class="why">Azure Database / AWS RDS with read replicas for scale</div>
+    </div>
+    <div class="stack-item">
+        <h4>Caching</h4>
+        <div class="tech">Redis</div>
+        <div class="why">Session management, query caching, real-time pub/sub</div>
+    </div>
+    <div class="stack-item">
+        <h4>Authentication</h4>
+        <div class="tech">Azure AD / Okta SSO</div>
+        <div class="why">Enterprise SSO, SAML 2.0, existing identity provider</div>
+    </div>
+    <div class="stack-item">
+        <h4>Message Queue</h4>
+        <div class="tech">BullMQ (Redis-backed)</div>
+        <div class="why">Async jobs, notifications, report generation</div>
+    </div>
+    <div class="stack-item">
+        <h4>Hosting</h4>
+        <div class="tech">Azure / AWS / GCP</div>
+        <div class="why">Kubernetes or App Service; enterprise SLAs, compliance</div>
+    </div>
+</div>
+
+<h3>Why This Stack for 1,600+ Users?</h3>
+<ul>
+    <li><strong>Dedicated API layer</strong> — NestJS provides structured, testable business logic separate from frontend</li>
+    <li><strong>Enterprise authentication</strong> — SSO integration with existing Azure AD/Okta identity providers</li>
+    <li><strong>Horizontal scaling</strong> — Stateless API servers behind load balancer; Redis for shared state</li>
+    <li><strong>Multi-office support</strong> — Proper tenant isolation and cross-office visibility controls</li>
+    <li><strong>Audit & compliance</strong> — Structured logging, audit trails, RBAC with fine-grained permissions</li>
+    <li><strong>Real-time at scale</strong> — Redis pub/sub + WebSockets for live updates across 40+ offices</li>
+    <li><strong>Background processing</strong> — Job queues for reports, bulk operations, notifications</li>
+</ul>
+
+<hr>
+
+<h2>3rd Party Services</h2>
+
+<h3>Timeline & Gantt Visualization</h3>
+<table>
+    <tr>
+        <th>Service</th>
+        <th>Type</th>
+        <th>Best For</th>
+        <th>Pricing</th>
+    </tr>
+    <tr>
+        <td><strong><a href="https://svar.dev/react/gantt/">SVAR Gantt</a></strong></td>
+        <td><span class="tag green">Open Source</span></td>
+        <td>Prototype & MVP — full-featured, React 19 compatible</td>
+        <td>Free (PRO from $290)</td>
+    </tr>
+    <tr>
+        <td><strong><a href="https://bryntum.com/products/react-gantt-chart/">Bryntum Gantt</a></strong></td>
+        <td><span class="tag purple">Enterprise</span></td>
+        <td>Advanced scheduling, resource histograms, dependencies</td>
+        <td>From $940/dev</td>
+    </tr>
+    <tr>
+        <td><strong><a href="https://www.syncfusion.com/react-components/react-gantt-chart">Syncfusion Gantt</a></strong></td>
+        <td><span class="tag purple">Enterprise</span></td>
+        <td>Critical path, baseline, resource allocation views</td>
+        <td>Free community license</td>
+    </tr>
+    <tr>
+        <td><strong><a href="https://dhtmlx.com/docs/products/dhtmlxGantt/">DHTMLX Gantt</a></strong></td>
+        <td><span class="tag">Hybrid</span></td>
+        <td>Mature library, handles 10,000+ tasks</td>
+        <td>Free (GPLv2) / Commercial</td>
+    </tr>
+</table>
+
+<div class="card">
+    <div class="card-title">Recommendation: Bryntum Gantt for Enterprise Scale</div>
+    <div class="card-desc">With 1,600 resources across 40 offices, Bryntum provides the performance and features needed: resource histograms, leveling, 10,000+ task handling, and excellent filtering. The license cost ($940/dev) is justified at this scale. Use SVAR for prototyping only.</div>
+</div>
+
+<h3>Workflow & Automation</h3>
+<table>
+    <tr>
+        <th>Service</th>
+        <th>Type</th>
+        <th>Best For</th>
+    </tr>
+    <tr>
+        <td><strong>NestJS Services + BullMQ</strong></td>
+        <td><span class="tag">Built-in</span></td>
+        <td>Core business logic: end date calculation, overlap validation, assignment rules. Runs in API layer.</td>
+    </tr>
+    <tr>
+        <td><strong><a href="https://n8n.io/">n8n</a></strong></td>
+        <td><span class="tag green">Self-hosted / Cloud</span></td>
+        <td>Visual workflows, 500+ integrations, AI-native. Notifications, cross-office approvals, escalations.</td>
+    </tr>
+    <tr>
+        <td><strong><a href="https://temporal.io/">Temporal</a></strong></td>
+        <td><span class="tag purple">Enterprise</span></td>
+        <td>Mission-critical workflows, fault-tolerant orchestration. Consider for complex approval chains.</td>
+    </tr>
+</table>
+
+<div class="card">
+    <div class="card-title">Recommendation: NestJS + BullMQ + n8n</div>
+    <div class="card-desc">Handle core scheduling logic (end date calculation, overlap checks, RBAC) in NestJS services. Use BullMQ for background jobs (reports, bulk operations). Add n8n for cross-office approval workflows, email notifications, and ERP integrations.</div>
+</div>
+
+<h3>Additional Services</h3>
+<table>
+    <tr>
+        <th>Need</th>
+        <th>Service</th>
+        <th>Why</th>
+    </tr>
+    <tr>
+        <td>Email notifications</td>
+        <td><a href="https://resend.com/">Resend</a></td>
+        <td>Developer-friendly, React Email templates</td>
+    </tr>
+    <tr>
+        <td>PDF export</td>
+        <td><a href="https://react-pdf.org/">React-PDF</a></td>
+        <td>Generate staffing reports, timesheets</td>
+    </tr>
+    <tr>
+        <td>File storage</td>
+        <td>Supabase Storage</td>
+        <td>Already included — store attachments</td>
+    </tr>
+    <tr>
+        <td>Analytics</td>
+        <td><a href="https://posthog.com/">PostHog</a></td>
+        <td>Product analytics, feature flags, self-hostable</td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Data Model</h2>
+
+<pre>
+┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
+│     Region      │       │     Office      │       │      Role       │
+├─────────────────┤       ├─────────────────┤       ├─────────────────┤
+│ id              │◄──────│ region_id       │       │ id              │
+│ name            │       │ id              │       │ name            │
+│ code            │       │ name            │       │ permissions[]   │
+└─────────────────┘       │ code            │       │ level           │
+                          │ timezone        │       └────────┬────────┘
+                          └────────┬────────┘                │
+                                   │                         │
+         ┌─────────────────────────┴─────────────────────────┘
+         │
+         ▼
+┌─────────────────┐       ┌─────────────────┐
+│    Resource     │       │     Project     │
+├─────────────────┤       ├─────────────────┤
+│ id              │       │ id              │
+│ name            │       │ name            │
+│ email           │       │ client_id       │
+│ role_id ────────┼───────│ lead_office_id  │
+│ hourly_rate     │       │ status          │
+│ skills[]        │       │ start_date      │
+│ office_id ──────┼───┐   │ end_date        │
+│ sso_id (Azure)  │   │   │ visibility      │ (office/region/global)
+└────────┬────────┘   │   └────────┬────────┘
+         │            │            │
+         │            │   ┌────────┴────────┐
+         │            │   │     Client      │
+         │            │   ├─────────────────┤
+         │            └──►│ id              │
+         │                │ name            │
+         │                │ primary_office  │
+         │                └─────────────────┘
+         │
+         │    ┌─────────────────┐
+         │    │      Task       │
+         │    ├─────────────────┤
+         │    │ id              │
+         │    │ project_id ─────┼──────────────────────┐
+         │    │ name            │                      │
+         │    │ estimated_hours │                      │
+         │    │ required_skills │                      │
+         │    │ status          │                      │
+         │    └────────┬────────┘                      │
+         │             │                               │
+         │             │                               │
+    ┌────┴─────────────┴────┐       ┌─────────────────┴───┐
+    │      Assignment       │       │    AuditLog         │
+    ├───────────────────────┤       ├─────────────────────┤
+    │ id                    │       │ id                  │
+    │ resource_id           │       │ entity_type         │
+    │ task_id               │       │ entity_id           │
+    │ start_date            │       │ action              │
+    │ end_date (calculated) │       │ user_id             │
+    │ hours_per_day         │       │ changes (JSONB)     │
+    │ status                │       │ timestamp           │
+    │ created_by            │       └─────────────────────┘
+    │ approved_by           │
+    └───────────────────────┘
+</pre>
+
+<h3>Key Business Rules</h3>
+<ul>
+    <li><code>end_date = start_date + (estimated_hours / hours_per_day)</code></li>
+    <li>One active assignment per resource at a time (no overlap)</li>
+    <li>Resources can be pre-scheduled for future tasks</li>
+    <li><strong>Office visibility:</strong> Users see their office by default; managers see region; admins see all</li>
+    <li><strong>Cross-office borrowing:</strong> Resources can be assigned to projects from other offices with approval</li>
+    <li><strong>Audit trail:</strong> All assignment changes logged with user, timestamp, and before/after state</li>
+</ul>
+
+<h3>Access Control Matrix</h3>
+<table>
+    <tr>
+        <th>Role</th>
+        <th>Own Office</th>
+        <th>Region Offices</th>
+        <th>All Offices</th>
+    </tr>
+    <tr>
+        <td>Staff</td>
+        <td>View own assignments</td>
+        <td>—</td>
+        <td>—</td>
+    </tr>
+    <tr>
+        <td>Team Lead</td>
+        <td>View/assign team</td>
+        <td>View only</td>
+        <td>—</td>
+    </tr>
+    <tr>
+        <td>Office Manager</td>
+        <td>Full CRUD</td>
+        <td>View + request</td>
+        <td>—</td>
+    </tr>
+    <tr>
+        <td>Regional Director</td>
+        <td>Full CRUD</td>
+        <td>Full CRUD</td>
+        <td>View only</td>
+    </tr>
+    <tr>
+        <td>Admin</td>
+        <td>Full CRUD</td>
+        <td>Full CRUD</td>
+        <td>Full CRUD</td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Implementation Phases</h2>
+
+<table>
+    <tr>
+        <th>Phase</th>
+        <th>Deliverables</th>
+        <th>Services Used</th>
+    </tr>
+    <tr>
+        <td><strong>1. Foundation</strong></td>
+        <td>
+            NestJS API scaffold with modules<br>
+            PostgreSQL schema + migrations (TypeORM/Prisma)<br>
+            Azure AD SSO integration<br>
+            CI/CD pipeline (GitHub Actions)
+        </td>
+        <td>
+            <span class="tag">NestJS</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag purple">Azure AD</span>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>2. Multi-Tenancy</strong></td>
+        <td>
+            Office & Region entities<br>
+            RBAC middleware (role permissions)<br>
+            Data visibility filters<br>
+            User sync from Azure AD
+        </td>
+        <td>
+            <span class="tag">CASL</span>
+            <span class="tag">MS Graph API</span>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>3. Core CRUD</strong></td>
+        <td>
+            Resource management (1,600+ users)<br>
+            Project & task management<br>
+            Next.js frontend with shadcn/ui<br>
+            OpenAPI documentation
+        </td>
+        <td>
+            <span class="tag">Next.js</span>
+            <span class="tag">shadcn/ui</span>
+            <span class="tag">Swagger</span>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>4. Scheduling Engine</strong></td>
+        <td>
+            Assignment creation with validation<br>
+            End date calculation service<br>
+            Overlap detection across offices<br>
+            Cross-office request workflow
+        </td>
+        <td>
+            <span class="tag">BullMQ</span>
+            <span class="tag">Redis</span>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>5. Visualization</strong></td>
+        <td>
+            Gantt timeline (office/region filtered)<br>
+            Resource calendar views<br>
+            Utilization dashboards per office<br>
+            Executive summary reports
+        </td>
+        <td>
+            <span class="tag purple">Bryntum Gantt</span>
+            <span class="tag">Chart.js</span>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>6. Real-time & Scale</strong></td>
+        <td>
+            WebSocket for live updates<br>
+            Redis caching layer<br>
+            Read replica routing<br>
+            Load testing (1,600 concurrent)
+        </td>
+        <td>
+            <span class="tag">Socket.io</span>
+            <span class="tag">Redis</span>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>7. Automation & Audit</strong></td>
+        <td>
+            Audit logging (all changes)<br>
+            Availability notifications<br>
+            Workflow automation<br>
+            ERP integration hooks
+        </td>
+        <td>
+            <span class="tag">n8n</span>
+            <span class="tag">Resend</span>
+        </td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Scaling Considerations</h2>
+
+<table>
+    <tr>
+        <th>Metric</th>
+        <th>Current Target</th>
+        <th>Architecture Support</th>
+    </tr>
+    <tr>
+        <td><strong>Concurrent Users</strong></td>
+        <td>1,600 experts</td>
+        <td>Stateless API pods auto-scale; Redis for sessions</td>
+    </tr>
+    <tr>
+        <td><strong>Offices</strong></td>
+        <td>40+ locations</td>
+        <td>Office-based data partitioning; regional caching</td>
+    </tr>
+    <tr>
+        <td><strong>Assignments/Year</strong></td>
+        <td>~50,000+</td>
+        <td>PostgreSQL with proper indexing; archive strategy</td>
+    </tr>
+    <tr>
+        <td><strong>Real-time Updates</strong></td>
+        <td>Sub-second</td>
+        <td>Redis pub/sub; WebSocket rooms per office</td>
+    </tr>
+    <tr>
+        <td><strong>Report Generation</strong></td>
+        <td>Background</td>
+        <td>BullMQ job queues; dedicated worker pods</td>
+    </tr>
+    <tr>
+        <td><strong>Availability</strong></td>
+        <td>99.9% SLA</td>
+        <td>Multi-AZ deployment; health checks; auto-recovery</td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Architecture Diagram</h2>
+
+<pre>
+┌──────────────────────────────────────────────────────────────────────────┐
+│                              CLIENTS                                      │
+│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐                  │
+│   │  Office A   │    │  Office B   │    │  Office N   │  (40+ offices)   │
+│   │   Users     │    │   Users     │    │   Users     │                  │
+│   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘                  │
+└──────────┼──────────────────┼──────────────────┼─────────────────────────┘
+           │                  │                  │
+           └──────────────────┼──────────────────┘
+                              ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         FRONTEND (CDN)                                    │
+│  ┌────────────────────────────────────────────────────────────────────┐  │
+│  │                    Next.js 15 (Azure Static / Vercel)              │  │
+│  │  ┌──────────┐  ┌──────────────┐  ┌───────────────────────────┐    │  │
+│  │  │  Pages   │  │  API Client  │  │    Bryntum/SVAR Gantt     │    │  │
+│  │  │ (React)  │  │  (OpenAPI)   │  │    Timeline + Resources   │    │  │
+│  │  └──────────┘  └──────────────┘  └───────────────────────────┘    │  │
+│  └────────────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────┬───────────────────────────────────────────┘
+                               │ HTTPS
+                               ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                      IDENTITY PROVIDER                                    │
+│  ┌─────────────────────────────────────────────────────────────────────┐ │
+│  │               Azure AD / Okta (SSO, SAML 2.0, OIDC)                 │ │
+│  │          1,600 users synced from corporate directory                │ │
+│  └─────────────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────┬───────────────────────────────────────────┘
+                               │ JWT
+                               ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    BACKEND API (NestJS Cluster)                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐ │
+│  │                    Load Balancer (Azure LB / ALB)                   │ │
+│  └─────────────────────────────────────────────────────────────────────┘ │
+│       │              │              │              │                      │
+│  ┌────┴────┐    ┌────┴────┐    ┌────┴────┐    ┌────┴────┐               │
+│  │ API Pod │    │ API Pod │    │ API Pod │    │ API Pod │  (auto-scale) │
+│  │ NestJS  │    │ NestJS  │    │ NestJS  │    │ NestJS  │               │
+│  └─────────┘    └─────────┘    └─────────┘    └─────────┘               │
+│       │              │              │              │                      │
+│  ┌────┴──────────────┴──────────────┴──────────────┴────┐               │
+│  │                    Shared Services                    │               │
+│  │  ┌──────────┐  ┌───────────┐  ┌────────────────────┐ │               │
+│  │  │  Redis   │  │  BullMQ   │  │   WebSocket Hub    │ │               │
+│  │  │  Cache   │  │  Queues   │  │  (Socket.io/Redis) │ │               │
+│  │  └──────────┘  └───────────┘  └────────────────────┘ │               │
+│  └──────────────────────────────────────────────────────┘               │
+└──────────────────────────────┬───────────────────────────────────────────┘
+                               │
+                               ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                          DATA LAYER                                       │
+│  ┌────────────────────────────────────────────────────────────────────┐  │
+│  │              PostgreSQL (Azure DB / AWS RDS)                       │  │
+│  │   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐        │  │
+│  │   │   Primary    │───▶│ Read Replica │    │ Read Replica │        │  │
+│  │   │   (Write)    │    │  (Reporting) │    │   (API)      │        │  │
+│  │   └──────────────┘    └──────────────┘    └──────────────┘        │  │
+│  └────────────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         INTEGRATIONS                                      │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │   n8n    │  │  Resend  │  │ PostHog  │  │  Azure   │  │   ERP    │  │
+│  │ Workflow │  │  Email   │  │Analytics │  │  Blob    │  │ (future) │  │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+└──────────────────────────────────────────────────────────────────────────┘
+</pre>
+
+<hr>
+
+<h2>Verification Checklist</h2>
+
+<h3>Core Functionality</h3>
+<table>
+    <tr>
+        <th style="width:40px">✓</th>
+        <th>Test Scenario</th>
+        <th>Expected Result</th>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Create resource with hourly rate</td>
+        <td>Resource saved, visible in list</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Create project with 40-hour task</td>
+        <td>Task shows estimated hours</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Assign resource to task (start Feb 3)</td>
+        <td>End date auto-calculated to Feb 7 (5 days)</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Try overlapping assignment</td>
+        <td>Error: resource already booked</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Schedule future task (start Feb 10)</td>
+        <td>Assignment created, shows in timeline</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>View staffing timeline</td>
+        <td>Gantt shows all resources with assignments</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Real-time update</td>
+        <td>Changes reflect immediately for all users</td>
+    </tr>
+</table>
+
+<h3>Multi-Office & Permissions (1,600 users / 40 offices)</h3>
+<table>
+    <tr>
+        <th style="width:40px">✓</th>
+        <th>Test Scenario</th>
+        <th>Expected Result</th>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>SSO login via Azure AD</td>
+        <td>User authenticated, role/office assigned from directory</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Staff views own assignments only</td>
+        <td>Cannot see other users' assignments or other offices</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Office Manager views office resources</td>
+        <td>Sees all resources in their office, can assign</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Regional Director views region</td>
+        <td>Sees all offices in region, full CRUD</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Cross-office resource request</td>
+        <td>Request created, notification sent to source office manager</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Filter Gantt by office/region</td>
+        <td>Timeline filtered to selected scope</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Audit log records change</td>
+        <td>Assignment change logged with user, timestamp, before/after</td>
+    </tr>
+</table>
+
+<h3>Scale & Performance</h3>
+<table>
+    <tr>
+        <th style="width:40px">✓</th>
+        <th>Test Scenario</th>
+        <th>Expected Result</th>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Load 1,600 resources in dropdown</td>
+        <td>Virtual scroll, search filter, &lt;500ms response</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Gantt with 500+ assignments</td>
+        <td>Smooth scrolling, lazy load, no UI freeze</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>100 concurrent users making changes</td>
+        <td>No conflicts, real-time sync works</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>Generate utilization report (all offices)</td>
+        <td>Background job, email when ready</td>
+    </tr>
+    <tr>
+        <td>☐</td>
+        <td>API response under load</td>
+        <td>&lt;200ms p95 latency</td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Quick Start Commands</h2>
+
+<h3>Backend (NestJS API)</h3>
+<pre>
+# Create NestJS project
+npm i -g @nestjs/cli
+nest new mallette-api --strict
+
+# Install core dependencies
+cd mallette-api
+npm install @nestjs/typeorm typeorm pg           # PostgreSQL ORM
+npm install @nestjs/passport passport-azure-ad   # Azure AD SSO
+npm install @nestjs/jwt passport-jwt             # JWT handling
+npm install @nestjs/bull bull                    # Job queues
+npm install ioredis @nestjs/cache-manager        # Redis caching
+npm install @nestjs/swagger swagger-ui-express   # API docs
+npm install class-validator class-transformer    # Validation
+npm install @casl/ability @casl/nestjs           # RBAC
+
+# Generate modules
+nest g module resources && nest g service resources && nest g controller resources
+nest g module offices && nest g service offices && nest g controller offices
+nest g module projects && nest g service projects && nest g controller projects
+nest g module assignments && nest g service assignments && nest g controller assignments
+
+# Database migrations
+npm run typeorm migration:generate -- -n InitialSchema
+npm run typeorm migration:run
+
+# Run development
+npm run start:dev
+</pre>
+
+<h3>Frontend (Next.js)</h3>
+<pre>
+# Create Next.js project
+npx create-next-app@latest mallette-web --typescript --tailwind --app
+
+# Install dependencies
+cd mallette-web
+npm install @tanstack/react-query axios          # API client
+npm install @azure/msal-browser @azure/msal-react  # Azure AD auth
+npm install @bryntum/gantt @bryntum/gantt-react  # Enterprise Gantt (licensed)
+# OR for MVP: npm install wx-react-gantt         # SVAR Gantt (open source)
+npm install socket.io-client                     # Real-time updates
+npx shadcn-ui@latest init                        # UI components
+
+# Run development
+npm run dev
+</pre>
+
+<h3>Infrastructure (Docker Compose for local dev)</h3>
+<pre>
+# docker-compose.yml
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: mallette
+      POSTGRES_USER: mallette
+      POSTGRES_PASSWORD: localdev
+    ports: ["5432:5432"]
+    volumes: [postgres_data:/var/lib/postgresql/data]
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  api:
+    build: ./mallette-api
+    ports: ["3001:3001"]
+    depends_on: [postgres, redis]
+    environment:
+      DATABASE_URL: postgres://mallette:localdev@postgres:5432/mallette
+      REDIS_URL: redis://redis:6379
+      AZURE_AD_TENANT_ID: ${AZURE_AD_TENANT_ID}
+      AZURE_AD_CLIENT_ID: ${AZURE_AD_CLIENT_ID}
+
+volumes:
+  postgres_data:
+</pre>
+
+<hr>
+
+<footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 0.9rem;">
+    <p><strong>Mallette Resource Planning</strong> — Enterprise Architecture (1,600 experts / 40+ offices)</p>
+    <p>Updated January 2026</p>
+</footer>
+
+</body>
+</html>

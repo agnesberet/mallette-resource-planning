@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Planning Prototype - Mallette</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            color: #333;
+        }
+        h1 { color: #1a365d; border-bottom: 3px solid #2b6cb0; padding-bottom: 10px; }
+        h2 { color: #2b6cb0; margin-top: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+        h3 { color: #4a5568; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #cbd5e0; padding: 10px 12px; text-align: left; }
+        th { background-color: #edf2f7; font-weight: 600; }
+        tr:nth-child(even) { background-color: #f7fafc; }
+        code, pre { background-color: #edf2f7; border-radius: 4px; font-family: 'Consolas', monospace; }
+        code { padding: 2px 6px; }
+        pre { padding: 15px; overflow-x: auto; border: 1px solid #e2e8f0; }
+        ul, ol { margin: 10px 0; }
+        li { margin: 5px 0; }
+        .section { page-break-inside: avoid; }
+        .highlight { background-color: #fefcbf; padding: 2px 4px; }
+        .checkbox { margin: 5px 0; }
+        a { color: #2b6cb0; }
+        hr { border: none; border-top: 2px solid #e2e8f0; margin: 30px 0; }
+        @media print {
+            body { padding: 20px; font-size: 11pt; }
+            h1 { font-size: 18pt; }
+            h2 { font-size: 14pt; }
+            pre { font-size: 9pt; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Resource Planning Prototype for Mallette</h1>
+
+<div class="section">
+<h2>Goal</h2>
+<p>Build a working prototype to validate resource planning requirements before deciding buy vs build.</p>
+</div>
+
+<div class="section">
+<h2>Requirements</h2>
+<table>
+    <tr><th>Requirement</th><th>Description</th></tr>
+    <tr><td>Resources</td><td>Financial advisors and accountants with hourly rates</td></tr>
+    <tr><td>Tasks</td><td>Work items with level of effort (hours), tied to projects</td></tr>
+    <tr><td>Assignment</td><td>One task per resource at a time</td></tr>
+    <tr><td>Planning</td><td>Assign resources to future tasks based on projected availability</td></tr>
+    <tr><td>Visibility</td><td>Staffing overview showing all assignments over time</td></tr>
+</table>
+</div>
+
+<hr>
+
+<div class="section">
+<h2>Recommended Approach: Microsoft Power Platform</h2>
+<p>Since Mallette uses Power Platform, building the prototype there provides:</p>
+<ul>
+    <li><strong>Lower development cost</strong> (Forrester: 70% reduction vs custom dev)</li>
+    <li><strong>Native Microsoft 365 integration</strong> (Teams, Outlook, SharePoint)</li>
+    <li><strong>Dataverse</strong> for structured data with relationships</li>
+    <li><strong>Power BI</strong> for staffing dashboards and utilization reports</li>
+    <li><strong>Power Automate</strong> for notifications and workflow automation</li>
+    <li><strong>Existing licensing</strong> - no new infrastructure needed</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="section">
+<h2>Power Platform Architecture</h2>
+
+<h3>Option A: Custom Power Apps Solution (Recommended)</h3>
+<p>Build a custom Canvas or Model-Driven App on Dataverse:</p>
+
+<h4>Dataverse Tables</h4>
+<pre>
+Resource
+├── ResourceId (GUID, Primary Key)
+├── Name (Text)
+├── Role (Choice: Accountant, Financial Advisor, Tax Specialist, etc.)
+├── HourlyRate (Currency)
+├── Skills (Multi-select Choice or related table)
+├── Email (Text)
+└── Office (Lookup to Office table)
+
+Project
+├── ProjectId (GUID, Primary Key)
+├── Name (Text)
+├── Client (Lookup to Account/Contact)
+├── Status (Choice: Planning, Active, Completed)
+├── StartDate (Date)
+└── EndDate (Date)
+
+Task
+├── TaskId (GUID, Primary Key)
+├── ProjectId (Lookup to Project)
+├── Name (Text)
+├── EstimatedHours (Number)
+├── Status (Choice: Not Started, In Progress, Completed)
+└── RequiredSkills (Multi-select or related table)
+
+Assignment
+├── AssignmentId (GUID, Primary Key)
+├── ResourceId (Lookup to Resource)
+├── TaskId (Lookup to Task)
+├── StartDate (Date)
+├── EndDate (Date, calculated)
+├── HoursPerDay (Number, default 8)
+└── Status (Choice: Scheduled, Active, Completed)
+</pre>
+
+<h4>Power Apps Components</h4>
+<table>
+    <tr><th>Component</th><th>Type</th><th>Purpose</th></tr>
+    <tr><td>Resource Manager</td><td>Model-Driven App</td><td>CRUD for resources, view assignments</td></tr>
+    <tr><td>Project Manager</td><td>Model-Driven App</td><td>CRUD for projects and tasks</td></tr>
+    <tr><td>Scheduling App</td><td>Canvas App</td><td>Drag-drop assignment interface</td></tr>
+    <tr><td>Staffing Dashboard</td><td>Power BI Embedded</td><td>Timeline view, utilization charts</td></tr>
+</table>
+
+<h4>Power Automate Flows</h4>
+<table>
+    <tr><th>Flow</th><th>Trigger</th><th>Action</th></tr>
+    <tr><td>Calculate End Date</td><td>Assignment created/updated</td><td>EndDate = StartDate + (Task.EstimatedHours / HoursPerDay)</td></tr>
+    <tr><td>Conflict Check</td><td>Assignment created</td><td>Fail if resource has overlapping assignment</td></tr>
+    <tr><td>Availability Alert</td><td>Assignment ending in 3 days</td><td>Notify manager resource becoming available</td></tr>
+</table>
+
+<h3>Option B: Universal Resource Scheduling (URS)</h3>
+<p>If Mallette has Dynamics 365, <strong>Universal Resource Scheduling</strong> is built-in:</p>
+<ul>
+    <li>Resource booking with skills/roles matching</li>
+    <li>Prevents overbooking automatically</li>
+    <li>Schedule board visualization</li>
+    <li>Works with Project for the Web</li>
+</ul>
+<p><strong>Pros:</strong> Already built, enterprise-ready<br>
+<strong>Cons:</strong> May be overkill for prototype, requires D365 license</p>
+
+<h3>Option C: Third-Party on Power Platform</h3>
+<p><strong>PowerRoster</strong> (by Velrada) - AppSource solution built on Dataverse for large workforces.</p>
+<p><strong>BrightWork 365</strong> - Resource Utilization Power BI Dashboard with 6-week capacity view.</p>
+</div>
+
+<hr>
+
+<div class="section">
+<h2>Implementation Plan</h2>
+
+<h3>Step 1: Set up Dataverse Tables (Day 1)</h3>
+<ul>
+    <li>Create Resource, Project, Task, Assignment tables</li>
+    <li>Define relationships and choice fields</li>
+    <li>Set up calculated columns for EndDate</li>
+</ul>
+
+<h3>Step 2: Build Model-Driven Apps (Day 1-2)</h3>
+<ul>
+    <li>Resource management app</li>
+    <li>Project/Task management app</li>
+    <li>Standard forms and views</li>
+</ul>
+
+<h3>Step 3: Build Canvas App for Scheduling (Day 2-3)</h3>
+<ul>
+    <li>Visual scheduler interface</li>
+    <li>Drag resources onto tasks</li>
+    <li>Show availability timeline</li>
+    <li>Business rules for conflict prevention</li>
+</ul>
+
+<h3>Step 4: Power Automate Flows (Day 3)</h3>
+<ul>
+    <li>End date calculation</li>
+    <li>Overlap validation</li>
+    <li>Notifications</li>
+</ul>
+
+<h3>Step 5: Staffing Views (Day 4)</h3>
+<ul>
+    <li>Table/grid view of all assignments (works without Power BI)</li>
+    <li>Filter by resource, date range, project</li>
+    <li><strong>Optional:</strong> Power BI timeline if available</li>
+</ul>
+
+<h3>Step 6: Testing & Validation (Day 5)</h3>
+<ul>
+    <li>Load sample data</li>
+    <li>Run through verification scenarios</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="section">
+<h2>Comparison: Power Platform vs Node.js</h2>
+<table>
+    <tr><th>Factor</th><th>Power Platform</th><th>Node.js</th></tr>
+    <tr><td>Development speed</td><td>Fast (low-code)</td><td>Moderate</td></tr>
+    <tr><td>Microsoft integration</td><td>Native</td><td>Requires setup</td></tr>
+    <tr><td>Customization</td><td>Limited by platform</td><td>Unlimited</td></tr>
+    <tr><td>Maintenance</td><td>Platform-managed</td><td>Self-managed</td></tr>
+    <tr><td>Cost</td><td>Existing licenses</td><td>Dev time + hosting</td></tr>
+    <tr><td>Visualization</td><td>Power BI built-in</td><td>Need to build/integrate</td></tr>
+    <tr><td>Scalability</td><td>Enterprise-ready</td><td>Depends on architecture</td></tr>
+</table>
+<p><strong>Recommendation:</strong> Start with Power Platform for faster prototype and native integration.</p>
+</div>
+
+<hr>
+
+<div class="section">
+<h2>Verification Scenarios</h2>
+<ol>
+    <li><strong>Single assignment:</strong> Assign Alice to Task 1, verify end date = StartDate + (40h / 8h/day) = 5 days</li>
+    <li><strong>Conflict prevention:</strong> Try to assign Alice to Task 2 overlapping Task 1 → should fail</li>
+    <li><strong>Sequential planning:</strong> Schedule Task 2 for Alice starting after Task 1 ends</li>
+    <li><strong>Availability query:</strong> Query when Alice is next available</li>
+    <li><strong>Staffing overview:</strong> View all assignments across Feb 2026</li>
+    <li><strong>Multiple resources:</strong> Assign Bob and Alice to parallel tasks</li>
+</ol>
+</div>
+
+<hr>
+
+<div class="section">
+<h2>Success Criteria</h2>
+<p>Prototype is successful if it can:</p>
+<div class="checkbox">☐ Create resources with roles and hourly rates</div>
+<div class="checkbox">☐ Create projects with tasks and level of effort</div>
+<div class="checkbox">☐ Assign resources to tasks with auto-calculated end dates</div>
+<div class="checkbox">☐ Prevent double-booking (one task at a time)</div>
+<div class="checkbox">☐ Show when resources become available</div>
+<div class="checkbox">☐ Schedule future assignments</div>
+<div class="checkbox">☐ Display staffing plan overview (timeline view)</div>
+</div>
+
+<hr>
+
+<div class="section">
+<h2>Sources</h2>
+<ul>
+    <li><a href="https://learn.microsoft.com/en-us/project-for-the-web/overview-universal-resource-scheduling">Universal Resource Scheduling - Microsoft Learn</a></li>
+    <li><a href="https://www.brightwork.com/blog/what-is-microsoft-power-apps-and-its-benefits-for-project-management">Power Apps for Project Management - BrightWork</a></li>
+    <li><a href="https://appsource.microsoft.com/en-in/product/dynamics-365/velrada.powerrosterip">PowerRoster - AppSource</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/types-calendars">Dataverse Calendars - Microsoft Learn</a></li>
+</ul>
+</div>
+
+<footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #718096; font-size: 0.9em;">
+    <p>Mallette Resource Planning Prototype Plan | Generated January 2026</p>
+</footer>
+
+</body>
+</html>
