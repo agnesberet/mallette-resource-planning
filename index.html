@@ -803,7 +803,7 @@ body {
   font-weight: 500;
   color: var(--text-secondary);
   letter-spacing: 0.2px;
-  transition: font-size 0.3s ease, opacity 0.3s ease;
+  transition: font-size 0.3s ease, opacity 0.18s ease, transform 0.18s ease;
   line-height: 1;
 }
 
@@ -1881,7 +1881,8 @@ body {
   box-shadow:
     0 0 8px rgba(var(--accent-rgb), 0.3),
     inset 0 0.5px 0 rgba(255,255,255,0.3);
-  transition: width 0.5s ease;
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 0; /* animated via JS after render */
 }
 
 /* Project card extras */
@@ -1923,6 +1924,68 @@ body {
   from { opacity: 0; transform: scale(0.97); }
   to { opacity: 1; transform: scale(1); }
 }
+
+/* Directional tab transitions */
+@keyframes pageFromRight {
+  from { opacity: 0; transform: translateX(28px) scale(0.98); }
+  to   { opacity: 1; transform: translateX(0)   scale(1);    }
+}
+@keyframes pageFromLeft {
+  from { opacity: 0; transform: translateX(-28px) scale(0.98); }
+  to   { opacity: 1; transform: translateX(0)     scale(1);    }
+}
+.page-from-right { animation: pageFromRight 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.page-from-left  { animation: pageFromLeft  0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Project detail slide */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideOutLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-24px); }
+}
+.slide-in-right { animation: slideInRight 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.slide-out-left { animation: slideOutLeft 0.22s ease both; }
+
+/* Badge status pop */
+@keyframes badgePop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.25); }
+  65%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.badge-pop { animation: badgePop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* List item exit */
+@keyframes itemSlideOut {
+  from { opacity: 1; transform: translateX(0);     max-height: 72px; }
+  to   { opacity: 0; transform: translateX(-16px); max-height: 0; margin: 0; padding: 0; }
+}
+.item-exit { animation: itemSlideOut 0.28s ease forwards; overflow: hidden; }
+
+/* Navbar title crossfade */
+@keyframes titleFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.title-in { animation: titleFadeIn 0.22s ease both; }
+
+/* Theme bloom flash */
+@keyframes themeBloom {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Accent colour ripple on content */
+@keyframes accentPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.25); }
+  70%  { box-shadow: 0 0 0 18px rgba(var(--accent-rgb), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0); }
+}
+.accent-pulse { animation: accentPulse 0.55s ease; }
 
 /* Stagger entrance for children */
 .stagger-in > * {
@@ -2780,6 +2843,15 @@ const PROJECT_DATA = [
   { id: 5, name: 'Internal Controls Audit', client: 'Bombardier Inc.', progress: 15, teamCount: 6, hours: 640 },
 ];
 
+// ---- Animate progress fills (start at 0, spring to target) ----
+function animateProgressFills(root = document) {
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    root.querySelectorAll('.progress-fill[data-progress]').forEach(el => {
+      el.style.width = el.dataset.progress + '%';
+    });
+  }));
+}
+
 // ---- State ----
 let currentTab = 'home';
 let currentOffice = 'all';
@@ -2851,33 +2923,43 @@ function positionTabPill(animate = true) {
   }
 }
 
+const TAB_ORDER = ['home', 'team', 'projects', 'settings'];
+
 function switchTab(tab) {
   if (tab === currentTab) return;
 
-  // Update tabs
   $$('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
 
-  // Switch page
   const oldPage = $(`#page-${currentTab}`);
   const newPage = $(`#page-${tab}`);
+  const dir = TAB_ORDER.indexOf(tab) > TAB_ORDER.indexOf(currentTab) ? 'right' : 'left';
 
   currentTab = tab;
-
-  // View transition
   const pageLabel = tab === 'home' ? 'Resource Planning' : (newPage?.dataset.title || '');
-  if (document.startViewTransition) {
-    document.startViewTransition(() => {
-      if (oldPage) oldPage.classList.remove('active');
-      if (newPage) newPage.classList.add('active');
-      navbarTitle.textContent = pageLabel;
-      pageContent.scrollTop = 0;
-    });
-  } else {
-    if (oldPage) oldPage.classList.remove('active');
-    if (newPage) newPage.classList.add('active');
-    navbarTitle.textContent = pageLabel;
-    pageContent.scrollTop = 0;
+
+  if (oldPage) oldPage.classList.remove('active');
+  if (newPage) {
+    newPage.classList.add('active');
+    // Remove any leftover direction classes then add new one
+    newPage.classList.remove('page-from-right', 'page-from-left');
+    void newPage.offsetWidth; // force reflow so animation restarts
+    newPage.classList.add(`page-from-${dir}`);
+    newPage.addEventListener('animationend', () => {
+      newPage.classList.remove('page-from-right', 'page-from-left');
+    }, { once: true });
   }
+  pageContent.scrollTop = 0;
+
+  // Crossfade navbar title
+  navbarTitle.style.opacity = '0';
+  navbarTitle.style.transform = 'translateY(4px)';
+  setTimeout(() => {
+    navbarTitle.textContent = pageLabel;
+    navbarTitle.classList.add('title-in');
+    navbarTitle.style.opacity = '';
+    navbarTitle.style.transform = '';
+    navbarTitle.addEventListener('animationend', () => navbarTitle.classList.remove('title-in'), { once: true });
+  }, 100);
 
   positionTabPill(true);
 
@@ -3014,6 +3096,11 @@ function initToggle(el, onChange) {
 // Theme toggle
 initToggle($('#themeToggle'), (dark) => {
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  // Bloom flash on theme switch
+  const bloom = document.createElement('div');
+  bloom.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;background:rgba(237,28,36,0.07);animation:themeBloom 0.5s ease forwards';
+  document.body.appendChild(bloom);
+  bloom.addEventListener('animationend', () => bloom.remove(), { once: true });
 });
 
 // Motion toggle
@@ -3048,10 +3135,11 @@ $$('.accent-swatch-wrap').forEach(wrap => {
     $$('.accent-swatch-wrap').forEach(w => w.classList.remove('active'));
     wrap.classList.add('active');
     document.documentElement.dataset.accent = wrap.dataset.accent;
-    // Re-update slider fill
     updateSliderFill(hoursSlider);
-    // Re-position tab pill to pick up color change
     positionTabPill(false);
+    // Pulse the active swatch to confirm selection
+    wrap.querySelector('.accent-swatch')?.classList.add('accent-pulse');
+    wrap.querySelector('.accent-swatch')?.addEventListener('animationend', (e) => e.target.classList.remove('accent-pulse'), { once: true });
   });
 });
 
@@ -3219,7 +3307,12 @@ function renderTeamList() {
   });
 }
 
-$('#teamSearch')?.addEventListener('input', renderTeamList);
+$('#teamSearch')?.addEventListener('input', () => {
+  const list = $('#teamList');
+  list.style.transition = 'opacity 0.12s ease';
+  list.style.opacity = '0.4';
+  setTimeout(() => { renderTeamList(); list.style.opacity = '1'; }, 120);
+});
 renderTeamList();
 
 
@@ -3262,7 +3355,7 @@ function renderProjectList() {
       <div class="card-title">${p.name}</div>
       <div class="card-subtitle">${p.client}</div>
       <div class="progress-bar">
-        <div class="progress-fill" style="width:${p.progress}%"></div>
+        <div class="progress-fill" data-progress="${p.progress}"></div>
       </div>
       <div class="project-meta">
         <div class="project-meta-item">
@@ -3302,6 +3395,8 @@ function renderProjectList() {
     }, i * 40);
   });
 
+  animateProgressFills(container);
+
   // Click → project detail
   container.querySelectorAll('.glass-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -3329,7 +3424,7 @@ function showProjectDetail(id) {
       <div class="card-label">${project.client}</div>
       <div class="card-title" style="font-size:20px; margin-top:4px">${project.name}</div>
       <div class="progress-bar" style="margin-top:12px">
-        <div class="progress-fill" style="width:${project.progress}%"></div>
+        <div class="progress-fill" data-progress="${project.progress}"></div>
       </div>
       <div class="project-meta" style="margin-top:8px">
         <div class="project-meta-item">Progress: <strong style="color:var(--accent);margin-left:4px">${project.progress}%</strong></div>
@@ -3351,34 +3446,48 @@ function showProjectDetail(id) {
     </div>
   `;
 
-  if (document.startViewTransition) {
-    document.startViewTransition(() => {
-      section.style.display = 'none';
-      detail.style.display = 'block';
-    });
-  } else {
+  section.classList.add('slide-out-left');
+  section.addEventListener('animationend', () => {
+    section.classList.remove('slide-out-left');
     section.style.display = 'none';
     detail.style.display = 'block';
-  }
+    detail.classList.add('slide-in-right');
+    detail.addEventListener('animationend', () => detail.classList.remove('slide-in-right'), { once: true });
+    animateProgressFills(detail);
+  }, { once: true });
 
-  navbarTitle.textContent = project.name;
+  // Crossfade navbar title
+  navbarTitle.style.opacity = '0';
+  navbarTitle.style.transform = 'translateY(4px)';
+  setTimeout(() => {
+    navbarTitle.textContent = project.name;
+    navbarTitle.classList.add('title-in');
+    navbarTitle.style.opacity = '';
+    navbarTitle.style.transform = '';
+    navbarTitle.addEventListener('animationend', () => navbarTitle.classList.remove('title-in'), { once: true });
+  }, 120);
 }
 
 function showProjectsList() {
   const detail = $('#projectDetail');
   const section = $('#projectsSection');
 
-  if (document.startViewTransition) {
-    document.startViewTransition(() => {
-      detail.style.display = 'none';
-      section.style.display = 'block';
-    });
-  } else {
+  detail.classList.add('slide-out-left');
+  detail.addEventListener('animationend', () => {
+    detail.classList.remove('slide-out-left');
     detail.style.display = 'none';
     section.style.display = 'block';
-  }
+    section.classList.add('slide-in-right');
+    section.addEventListener('animationend', () => section.classList.remove('slide-in-right'), { once: true });
+  }, { once: true });
 
-  navbarTitle.textContent = 'Projects';
+  navbarTitle.style.opacity = '0';
+  setTimeout(() => {
+    navbarTitle.textContent = 'Projects';
+    navbarTitle.classList.add('title-in');
+    navbarTitle.style.opacity = '';
+    navbarTitle.addEventListener('animationend', () => navbarTitle.classList.remove('title-in'), { once: true });
+  }, 120);
 }
 
 $('#projectBackBtn').addEventListener('click', showProjectsList);
@@ -3726,7 +3835,7 @@ function openAssignModal(member) {
               <div class="list-item-subtitle">${p.client}</div>
               <div style="margin-top:6px">
                 <div class="progress-bar" style="height:3px;border-radius:2px">
-                  <div class="progress-fill" style="width:${p.progress}%"></div>
+                  <div class="progress-fill" data-progress="${p.progress}"></div>
                 </div>
               </div>
             </div>
@@ -3767,6 +3876,8 @@ function openAssignModal(member) {
     });
   };
 
+  animateProgressFills(content);
+
   $('#modalClose')?.addEventListener('click', closeModal);
   backdrop.addEventListener('click', closeModal, { once: true });
 
@@ -3788,14 +3899,25 @@ function openAssignModal(member) {
       const memberRow = document.querySelector(`[data-member-id="${member.id}"]`);
       if (memberRow) {
         const badge = memberRow.querySelector('.list-item-badge');
-        if (badge) { badge.className = 'list-item-badge badge-assigned'; badge.textContent = 'Assigned'; }
+        if (badge) {
+          badge.className = 'list-item-badge badge-assigned badge-pop';
+          badge.textContent = 'Assigned';
+          badge.addEventListener('animationend', () => badge.classList.remove('badge-pop'), { once: true });
+        }
         const subtitle = memberRow.querySelector('.list-item-subtitle');
         if (subtitle && m) subtitle.textContent = `${m.role} \u00b7 ${project.name}`;
         const avatar = memberRow.querySelector('.list-item-avatar');
         if (avatar) { avatar.className = 'list-item-avatar avatar-assigned'; }
       }
 
-      renderUpcomingAvailability();
+      // Animate the member's row out of Upcoming Availability before re-rendering
+      const upcomingRow = document.querySelector(`#upcomingList [onclick="openMemberSheet(${member.id})"]`);
+      if (upcomingRow) {
+        upcomingRow.classList.add('item-exit');
+        upcomingRow.addEventListener('animationend', renderUpcomingAvailability, { once: true });
+      } else {
+        renderUpcomingAvailability();
+      }
       closeModal();
       showNotification('Assigned', `${member.name} assigned to ${project.name}.`);
     });
