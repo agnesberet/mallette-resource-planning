@@ -332,11 +332,11 @@ body {
 /* ---- Dark TabBar ---- */
 [data-theme="dark"] .glass-tabbar {
   background:
-    linear-gradient(0deg, rgba(var(--glass-tint-rgb), 0.06) 0%, rgba(var(--glass-bg-rgb), var(--glass-opacity)) 100%);
-  backdrop-filter: blur(28px) saturate(2.0) brightness(1.1);
-  -webkit-backdrop-filter: blur(28px) saturate(2.0) brightness(1.1);
-  border-top-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 -1px 12px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.06);
+    linear-gradient(0deg, rgba(var(--glass-tint-rgb), 0.18) 0%, rgba(var(--glass-bg-rgb), 0.55) 100%);
+  backdrop-filter: blur(28px) saturate(2.0) brightness(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(2.0) brightness(1.4);
+  border-top-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -1px 16px rgba(0,0,0,0.35), inset 0 0.5px 0 rgba(255,255,255,0.12);
 }
 
 /* ---- Dark Tab Pill ---- */
@@ -353,11 +353,11 @@ body {
 /* ---- Dark Buttons ---- */
 [data-theme="dark"] .glass-btn {
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%),
-    rgba(var(--glass-bg-rgb), 0.15);
-  border-color: rgba(255, 255, 255, 0.08);
-  border-top-color: rgba(255, 255, 255, 0.12);
-  border-bottom-color: rgba(0, 0, 0, 0.15);
+    linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 100%),
+    rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.22);
+  border-bottom-color: rgba(0, 0, 0, 0.2);
   box-shadow:
     0 2px 10px rgba(0,0,0,0.2),
     inset 0 1px 0 rgba(255,255,255,0.08),
@@ -366,8 +366,8 @@ body {
 
 [data-theme="dark"] .glass-btn:hover {
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%),
-    rgba(var(--glass-bg-rgb), 0.2);
+    linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%),
+    rgba(255, 255, 255, 0.09);
   box-shadow:
     0 4px 16px rgba(0,0,0,0.25),
     inset 0 1px 0 rgba(255,255,255,0.1),
@@ -705,6 +705,15 @@ body {
 
 .app-background-photo.active {
   opacity: 1;
+}
+
+/* Crimson tint overlay on all photo backgrounds */
+.app-background-photo.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(120, 10, 20, 0.55) 0%, rgba(50, 5, 10, 0.65) 100%);
+  pointer-events: none;
 }
 
 @keyframes gradientShift {
@@ -2173,10 +2182,10 @@ body {
 }
 
 .accent-swatch {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   transition: border-color 0.2s ease, transform 0.2s ease;
   pointer-events: none;
 }
@@ -2222,10 +2231,10 @@ body {
 .bg-picker::-webkit-scrollbar { display: none; }
 
 .bg-thumb {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  border: 2.5px solid transparent;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
   cursor: pointer;
   background-size: cover;
   background-position: center;
@@ -2237,11 +2246,21 @@ body {
 .bg-thumb.active {
   border-color: rgba(255, 255, 255, 0.55);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
+  transform: scale(1.12);
 }
 
 .bg-thumb-gradient {
   background: linear-gradient(135deg, #FFB3BC 0%, #FFCBB8 50%, #FFA8B8 100%);
+}
+
+.bg-thumb-quebec-day {
+  background: url('https://images.pexels.com/photos/32762707/pexels-photo-32762707.jpeg?auto=compress&cs=tinysrgb&w=120') center/cover;
+}
+
+.bg-thumb-mallette-dark {
+  background:
+    linear-gradient(160deg, rgba(120, 10, 20, 0.55) 0%, rgba(40, 4, 8, 0.7) 100%),
+    url('https://images.unsplash.com/photo-1716840268887-6717c6b60902?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=60&w=120') center/cover;
 }
 
 [data-theme="dark"] .bg-thumb-gradient {
@@ -2382,34 +2401,9 @@ body {
         </div>
 
         <!-- Upcoming availability -->
-        <div style="margin-top:20px">
+        <div style="margin-top:20px" id="upcomingSection">
           <div class="section-title">Upcoming Availability</div>
-          <div class="glass-list">
-            <div class="glass-list-item" onclick="openMemberSheet(1)">
-              <div class="list-item-avatar avatar-available">SB</div>
-              <div class="list-item-content">
-                <div class="list-item-title">Sophie Bouchard</div>
-                <div class="list-item-subtitle">Senior Auditor &middot; Free Feb 20</div>
-              </div>
-              <span class="list-item-badge badge-available">Available</span>
-            </div>
-            <div class="glass-list-item" onclick="openMemberSheet(2)">
-              <div class="list-item-avatar avatar-assigned">MT</div>
-              <div class="list-item-content">
-                <div class="list-item-title">Marc Tremblay</div>
-                <div class="list-item-subtitle">Tax Consultant &middot; Free Feb 22</div>
-              </div>
-              <span class="list-item-badge badge-assigned">Wrapping Up</span>
-            </div>
-            <div class="glass-list-item" onclick="openMemberSheet(3)">
-              <div class="list-item-avatar avatar-leave">JL</div>
-              <div class="list-item-content">
-                <div class="list-item-title">Julie Lavoie</div>
-                <div class="list-item-subtitle">CPA &middot; Free Feb 24</div>
-              </div>
-              <span class="list-item-badge badge-leave">On Leave</span>
-            </div>
-          </div>
+          <div class="glass-list" id="upcomingList"></div>
         </div>
       </div>
     </div>
@@ -2506,7 +2500,8 @@ body {
             <span class="settings-label">Background</span>
             <div class="bg-picker" id="bgPicker">
               <div class="bg-thumb bg-thumb-gradient active" data-bg="gradient" title="Gradient"></div>
-              <div class="bg-thumb" data-bg="glass" title="Liquid Glass" style="background-image:url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&q=60&fit=crop')"></div>
+              <div class="bg-thumb bg-thumb-quebec-day" data-bg="quebec-day" title="Québec City — Day"></div>
+              <div class="bg-thumb bg-thumb-mallette-dark" data-bg="mallette-dark" title="Québec City — Night"></div>
             </div>
           </div>
           <div class="settings-row">
@@ -3063,7 +3058,8 @@ $$('.accent-swatch-wrap').forEach(wrap => {
 
 // ---- Background picker ----
 const BG_PHOTOS = {
-  glass: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1400&q=85&fit=crop',
+  'quebec-day':    'https://images.pexels.com/photos/32762707/pexels-photo-32762707.jpeg?auto=compress&cs=tinysrgb&w=1920',
+  'mallette-dark': 'https://images.unsplash.com/photo-1716840268887-6717c6b60902?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1920',
 };
 
 const appBg = $('#appBg');
@@ -3077,11 +3073,9 @@ $$('.bg-thumb').forEach(thumb => {
     const key = thumb.dataset.bg;
 
     if (key === 'gradient') {
-      // Show gradient, hide photo
       appBg.style.opacity = '1';
       appBgPhoto.classList.remove('active');
     } else {
-      // Load full-res photo, show it, dim gradient
       appBgPhoto.style.backgroundImage = `url('${BG_PHOTOS[key]}')`;
       appBgPhoto.classList.add('active');
       appBg.style.opacity = '0';
@@ -3227,6 +3221,37 @@ function renderTeamList() {
 
 $('#teamSearch')?.addEventListener('input', renderTeamList);
 renderTeamList();
+
+
+// ---- Upcoming Availability ----
+function renderUpcomingAvailability() {
+  const list = $('#upcomingList');
+  if (!list) return;
+
+  const available = TEAM_DATA.filter(m => m.status !== 'assigned');
+
+  if (available.length === 0) {
+    list.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-tertiary);font-size:13px">All team members are currently assigned.</div>`;
+    return;
+  }
+
+  list.innerHTML = available.map(m => {
+    const avatarClass = m.status === 'available' ? 'avatar-available' : 'avatar-leave';
+    const badgeClass  = m.status === 'available' ? 'badge-available' : 'badge-leave';
+    const badgeLabel  = m.status === 'available' ? 'Available' : 'On Leave';
+    const subtitle    = m.status === 'available' ? `${m.role} \u00b7 Available now` : `${m.role} \u00b7 On Leave`;
+    return `
+      <div class="glass-list-item" onclick="openMemberSheet(${m.id})">
+        <div class="list-item-avatar ${avatarClass}">${m.initials}</div>
+        <div class="list-item-content">
+          <div class="list-item-title">${m.name}</div>
+          <div class="list-item-subtitle">${subtitle}</div>
+        </div>
+        <span class="list-item-badge ${badgeClass}">${badgeLabel}</span>
+      </div>`;
+  }).join('');
+}
+renderUpcomingAvailability();
 
 
 // ---- Project list ----
@@ -3500,7 +3525,7 @@ function openMemberSheet(id) {
       </div>
     </div>
     <div style="margin-top:16px; display:flex; gap:10px">
-      <button class="glass-btn glass-btn-primary" style="flex:1" onclick="closeSheet(); showNotification('Assigned', '${member.name} assigned to project.')">Assign to Project</button>
+      <button class="glass-btn glass-btn-primary" style="flex:1" onclick="closeSheet(); setTimeout(() => openAssignModal(TEAM_DATA.find(m => m.id === ${member.id})), 320)">Assign to Project</button>
       <button class="glass-btn" style="flex:1" onclick="closeSheet()">Close</button>
     </div>
   `;
@@ -3759,7 +3784,18 @@ function openAssignModal(member) {
 
       project.teamCount = Math.max(project.teamCount, 1);
 
-      renderTeamList();
+      // Update the specific row in-place — no full re-render flicker
+      const memberRow = document.querySelector(`[data-member-id="${member.id}"]`);
+      if (memberRow) {
+        const badge = memberRow.querySelector('.list-item-badge');
+        if (badge) { badge.className = 'list-item-badge badge-assigned'; badge.textContent = 'Assigned'; }
+        const subtitle = memberRow.querySelector('.list-item-subtitle');
+        if (subtitle && m) subtitle.textContent = `${m.role} \u00b7 ${project.name}`;
+        const avatar = memberRow.querySelector('.list-item-avatar');
+        if (avatar) { avatar.className = 'list-item-avatar avatar-assigned'; }
+      }
+
+      renderUpcomingAvailability();
       closeModal();
       showNotification('Assigned', `${member.name} assigned to ${project.name}.`);
     });
