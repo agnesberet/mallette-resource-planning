@@ -707,14 +707,6 @@ body {
   opacity: 1;
 }
 
-/* Crimson tint overlay on all photo backgrounds */
-.app-background-photo.active::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(160deg, rgba(120, 10, 20, 0.55) 0%, rgba(50, 5, 10, 0.65) 100%);
-  pointer-events: none;
-}
 
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
@@ -2316,15 +2308,6 @@ body {
   background: linear-gradient(135deg, #FFB3BC 0%, #FFCBB8 50%, #FFA8B8 100%);
 }
 
-.bg-thumb-quebec-day {
-  background: url('https://images.pexels.com/photos/32762707/pexels-photo-32762707.jpeg?auto=compress&cs=tinysrgb&w=120') center/cover;
-}
-
-.bg-thumb-mallette-dark {
-  background:
-    linear-gradient(160deg, rgba(120, 10, 20, 0.55) 0%, rgba(40, 4, 8, 0.7) 100%),
-    url('https://images.unsplash.com/photo-1716840268887-6717c6b60902?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=60&w=120') center/cover;
-}
 
 [data-theme="dark"] .bg-thumb-gradient {
   background: linear-gradient(135deg, #7A1020 0%, #5C0A14 50%, #8A1818 100%);
@@ -2563,8 +2546,6 @@ body {
             <span class="settings-label">Background</span>
             <div class="bg-picker" id="bgPicker">
               <div class="bg-thumb bg-thumb-gradient active" data-bg="gradient" title="Gradient"></div>
-              <div class="bg-thumb bg-thumb-quebec-day" data-bg="quebec-day" title="Québec City — Day"></div>
-              <div class="bg-thumb bg-thumb-mallette-dark" data-bg="mallette-dark" title="Québec City — Night"></div>
             </div>
           </div>
           <div class="settings-row">
@@ -3145,10 +3126,7 @@ $$('.accent-swatch-wrap').forEach(wrap => {
 
 
 // ---- Background picker ----
-const BG_PHOTOS = {
-  'quebec-day':    'https://images.pexels.com/photos/32762707/pexels-photo-32762707.jpeg?auto=compress&cs=tinysrgb&w=1920',
-  'mallette-dark': 'https://images.unsplash.com/photo-1716840268887-6717c6b60902?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1920',
-};
+const BG_PHOTOS = {};
 
 const appBg = $('#appBg');
 const appBgPhoto = $('#appBgPhoto');
