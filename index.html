@@ -128,26 +128,26 @@ body {
 
 /* ---- Dark Theme Tokens ---- */
 [data-theme="dark"] {
-  --glass-blur: 24px;
-  --glass-opacity: 0.12;
-  --glass-tint-opacity: 0.08;
-  --glass-border-opacity: 0.12;
-  --glass-specular-opacity: 0.2;
-  --glass-shadow-opacity: 0.4;
+  --glass-blur: 28px;
+  --glass-opacity: 0.28;
+  --glass-tint-opacity: 0.14;
+  --glass-border-opacity: 0.22;
+  --glass-specular-opacity: 0.38;
+  --glass-shadow-opacity: 0.55;
 
-  --glass-bg-rgb: 80, 10, 18;
-  --glass-tint-rgb: 180, 20, 40;
+  --glass-bg-rgb: 120, 20, 35;
+  --glass-tint-rgb: 200, 40, 60;
   --glass-border: rgba(255, 255, 255, var(--glass-border-opacity));
   --glass-shadow: rgba(0, 0, 0, var(--glass-shadow-opacity));
   --glass-specular: rgba(255, 255, 255, var(--glass-specular-opacity));
 
-  --surface-primary: rgba(40, 10, 12, 0.35);
-  --surface-secondary: rgba(50, 12, 14, 0.25);
-  --surface-tertiary: rgba(55, 14, 16, 0.18);
+  --surface-primary: rgba(140, 30, 45, 0.45);
+  --surface-secondary: rgba(160, 40, 55, 0.32);
+  --surface-tertiary: rgba(180, 50, 65, 0.22);
 
-  --text-primary: rgba(255, 255, 255, 0.94);
-  --text-secondary: rgba(255, 255, 255, 0.6);
-  --text-tertiary: rgba(255, 255, 255, 0.35);
+  --text-primary: rgba(255, 255, 255, 0.96);
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-tertiary: rgba(255, 255, 255, 0.48);
   --text-inverse: rgba(0, 0, 0, 0.88);
 
   --bg-gradient-stop-1: #7A1020;
@@ -155,9 +155,9 @@ body {
   --bg-gradient-stop-3: #6B1028;
   --bg-gradient-stop-4: #8A1818;
 
-  --divider: rgba(255, 255, 255, 0.06);
-  --skeleton-base: rgba(255, 255, 255, 0.05);
-  --skeleton-shine: rgba(255, 255, 255, 0.12);
+  --divider: rgba(255, 255, 255, 0.10);
+  --skeleton-base: rgba(255, 255, 255, 0.08);
+  --skeleton-shine: rgba(255, 255, 255, 0.18);
 }
 
 /* ---- Accent Color Tokens ---- */
@@ -256,67 +256,67 @@ body {
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.04) 0%,
-      transparent 30%,
-      rgba(var(--glass-tint-rgb), 0.06) 100%
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.02) 30%,
+      rgba(var(--glass-tint-rgb), 0.10) 100%
     ),
     radial-gradient(ellipse at 50% 0%,
-      rgba(var(--accent-rgb), 0.03),
+      rgba(var(--accent-rgb), 0.06),
       transparent 60%),
     rgba(var(--glass-bg-rgb), var(--glass-opacity));
-  border-color: rgba(255, 255, 255, 0.08);
-  border-top-color: rgba(255, 255, 255, 0.14);
-  border-bottom-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(var(--glass-blur)) saturate(2.0) brightness(1.1);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(2.0) brightness(1.1);
+  border-color: rgba(255, 255, 255, var(--glass-border-opacity));
+  border-top-color: rgba(255, 255, 255, 0.30);
+  border-bottom-color: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(var(--glass-blur)) saturate(2.2) brightness(1.15);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(2.2) brightness(1.15);
   box-shadow:
-    0 4px 24px -2px rgba(0, 0, 0, 0.3),
-    0 1px 3px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -0.5px 0 rgba(0, 0, 0, 0.15),
-    inset 0 0 20px rgba(var(--accent-rgb), 0.02);
+    0 4px 32px -2px rgba(0, 0, 0, 0.45),
+    0 1px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.2),
+    inset 0 0 24px rgba(var(--accent-rgb), 0.04);
 }
 
-/* Dark specular — subtler top-edge highlight */
+/* Dark specular — stronger top-edge highlight */
 [data-theme="dark"] .glass::before {
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.12) 0%,
-      rgba(255, 255, 255, 0.03) 2px,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.06) 2px,
       transparent 30%
     );
 }
 
-/* Dark noise — reduce to avoid muddiness */
+/* Dark noise — keep subtle */
 [data-theme="dark"] .glass::after {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 /* Dark elevation levels */
 [data-theme="dark"] .glass-1 {
   box-shadow:
-    0 2px 8px rgba(0,0,0,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.06),
-    inset 0 0 12px rgba(var(--accent-rgb), 0.02);
+    0 2px 12px rgba(0,0,0,0.40),
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 0 16px rgba(var(--accent-rgb), 0.04);
 }
 [data-theme="dark"] .glass-2 {
   box-shadow:
-    0 4px 20px rgba(0,0,0,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 0 20px rgba(var(--accent-rgb), 0.02);
+    0 4px 28px rgba(0,0,0,0.50),
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 0 24px rgba(var(--accent-rgb), 0.05);
 }
 [data-theme="dark"] .glass-3 {
   box-shadow:
-    0 8px 40px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.1),
-    inset 0 0 30px rgba(var(--accent-rgb), 0.03);
+    0 8px 48px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 0 36px rgba(var(--accent-rgb), 0.06);
 }
 [data-theme="dark"] .glass-4 {
   box-shadow:
-    0 16px 56px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.12),
-    inset 0 0 40px rgba(var(--accent-rgb), 0.04);
+    0 16px 64px rgba(0,0,0,0.60),
+    inset 0 1px 0 rgba(255,255,255,0.26),
+    inset 0 0 48px rgba(var(--accent-rgb), 0.08);
 }
 
 /* ---- Dark Navbar ---- */
@@ -1514,6 +1514,27 @@ body {
   flex-shrink: 0;
 }
 
+.list-item-avatar.avatar-available {
+  background: linear-gradient(135deg, rgba(255, 200, 205, 0.55), rgba(255, 180, 188, 0.28));
+  border-color: rgba(212, 120, 130, 0.28);
+  box-shadow: 0 1px 4px rgba(212, 120, 130, 0.15), inset 0 1px 0 rgba(255,255,255,0.25);
+  color: #C84858;
+}
+
+.list-item-avatar.avatar-assigned {
+  background: linear-gradient(135deg, rgba(237, 28, 36, 0.22), rgba(237, 28, 36, 0.08));
+  border-color: rgba(184, 40, 52, 0.22);
+  box-shadow: 0 1px 4px rgba(184, 40, 52, 0.14), inset 0 1px 0 rgba(255,255,255,0.2);
+  color: #B02838;
+}
+
+.list-item-avatar.avatar-leave {
+  background: linear-gradient(135deg, rgba(200, 155, 165, 0.35), rgba(180, 130, 145, 0.15));
+  border-color: rgba(180, 130, 145, 0.20);
+  box-shadow: 0 1px 4px rgba(160, 112, 128, 0.12), inset 0 1px 0 rgba(255,255,255,0.2);
+  color: #9A7080;
+}
+
 .list-item-content {
   flex: 1;
   min-width: 0;
@@ -1565,6 +1586,52 @@ body {
   background: rgba(200, 155, 165, 0.22);
   color: #9A7080;
   border-color: rgba(180, 130, 145, 0.20);
+}
+
+/* ---- Dark mode label & badge overrides ---- */
+[data-theme="dark"] .section-title {
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: 0.6px;
+}
+
+[data-theme="dark"] .card-label {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+[data-theme="dark"] .badge-available {
+  background: rgba(255, 160, 170, 0.18);
+  color: #FF9AA6;
+  border-color: rgba(255, 150, 165, 0.30);
+}
+
+[data-theme="dark"] .badge-assigned {
+  background: rgba(237, 28, 36, 0.22);
+  color: #FF6472;
+  border-color: rgba(237, 80, 90, 0.35);
+}
+
+[data-theme="dark"] .badge-leave {
+  background: rgba(210, 160, 175, 0.18);
+  color: #DDB0C0;
+  border-color: rgba(210, 160, 175, 0.28);
+}
+
+[data-theme="dark"] .list-item-avatar.avatar-available {
+  background: linear-gradient(135deg, rgba(255, 140, 155, 0.30), rgba(255, 120, 135, 0.14));
+  border-color: rgba(255, 150, 165, 0.30);
+  color: #FF9AA6;
+}
+
+[data-theme="dark"] .list-item-avatar.avatar-assigned {
+  background: linear-gradient(135deg, rgba(237, 28, 36, 0.32), rgba(237, 28, 36, 0.14));
+  border-color: rgba(237, 80, 90, 0.35);
+  color: #FF6472;
+}
+
+[data-theme="dark"] .list-item-avatar.avatar-leave {
+  background: linear-gradient(135deg, rgba(210, 160, 175, 0.28), rgba(190, 140, 158, 0.12));
+  border-color: rgba(210, 160, 175, 0.28);
+  color: #DDB0C0;
 }
 
 /* ---- GlassNotification ---- */
@@ -2319,7 +2386,7 @@ body {
           <div class="section-title">Upcoming Availability</div>
           <div class="glass-list">
             <div class="glass-list-item" onclick="openMemberSheet(1)">
-              <div class="list-item-avatar">SB</div>
+              <div class="list-item-avatar avatar-available">SB</div>
               <div class="list-item-content">
                 <div class="list-item-title">Sophie Bouchard</div>
                 <div class="list-item-subtitle">Senior Auditor &middot; Free Feb 20</div>
@@ -2327,7 +2394,7 @@ body {
               <span class="list-item-badge badge-available">Available</span>
             </div>
             <div class="glass-list-item" onclick="openMemberSheet(2)">
-              <div class="list-item-avatar">MT</div>
+              <div class="list-item-avatar avatar-assigned">MT</div>
               <div class="list-item-content">
                 <div class="list-item-title">Marc Tremblay</div>
                 <div class="list-item-subtitle">Tax Consultant &middot; Free Feb 22</div>
@@ -2335,7 +2402,7 @@ body {
               <span class="list-item-badge badge-assigned">Wrapping Up</span>
             </div>
             <div class="glass-list-item" onclick="openMemberSheet(3)">
-              <div class="list-item-avatar">JL</div>
+              <div class="list-item-avatar avatar-leave">JL</div>
               <div class="list-item-content">
                 <div class="list-item-title">Julie Lavoie</div>
                 <div class="list-item-subtitle">CPA &middot; Free Feb 24</div>
@@ -3105,9 +3172,10 @@ function renderTeamList() {
     const badgeLabel = m.status === 'available' ? 'Available' : m.status === 'assigned' ? 'Assigned' : 'On Leave';
     const subtitle = m.project ? `${m.role} \u00b7 ${m.project}` : `${m.role} \u00b7 ${m.office.charAt(0).toUpperCase() + m.office.slice(1)}`;
 
+    const avatarClass = m.status === 'available' ? 'avatar-available' : m.status === 'assigned' ? 'avatar-assigned' : 'avatar-leave';
     return `
       <div class="glass-list-item" data-member-id="${m.id}" data-context-target>
-        <div class="list-item-avatar">${m.initials}</div>
+        <div class="list-item-avatar ${avatarClass}">${m.initials}</div>
         <div class="list-item-content">
           <div class="list-item-title">${m.name}</div>
           <div class="list-item-subtitle">${subtitle}</div>
@@ -3603,6 +3671,102 @@ $('#notifyBtn').addEventListener('click', () => {
 });
 
 
+// ---- Assign to Project Modal ----
+function openAssignModal(member) {
+  const backdrop = $('#modalBackdrop');
+  const modal = $('#modal');
+  const content = $('#modalContent');
+  const app = $('#app');
+
+  content.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">Assign to Project</div>
+      <button class="glass-btn glass-btn-ghost glass-btn-round" id="modalClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="margin-bottom:14px;font-size:13px;color:var(--text-secondary)">
+      Select a project for <strong style="color:var(--text-primary)">${member.name}</strong>
+    </div>
+    <div class="glass-list" id="assignProjectList">
+      ${PROJECT_DATA.map(p => {
+        const isCurrentProject = member.project === p.name;
+        return `
+          <div class="glass-list-item assign-project-row" data-project-id="${p.id}" style="cursor:pointer">
+            <div style="flex:1;min-width:0">
+              <div class="list-item-title" style="display:flex;align-items:center;gap:8px">
+                ${p.name}
+                ${isCurrentProject ? `<span class="list-item-badge badge-assigned" style="font-size:10px;padding:2px 8px">Current</span>` : ''}
+              </div>
+              <div class="list-item-subtitle">${p.client}</div>
+              <div style="margin-top:6px">
+                <div class="progress-bar" style="height:3px;border-radius:2px">
+                  <div class="progress-fill" style="width:${p.progress}%"></div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:12px;font-weight:600;color:var(--accent);margin-left:12px;flex-shrink:0">${p.progress}%</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  backdrop.classList.add('visible');
+
+  springAnimator.animate('modal-y', new Spring(Spring.GENTLE), 40, 0, (val) => {
+    modal.style.transform = `translateY(${val}px) scale(${0.95 + 0.05 * (1 - val / 40)})`;
+    modal.style.opacity = String(1 - val / 40);
+  });
+
+  springAnimator.animate('modal-pushback', new Spring(Spring.GENTLE), 1, 0.94, (val) => {
+    app.style.transform = `scale(${val})`;
+    app.style.filter = `blur(${(1 - val) * 60}px)`;
+  });
+
+  const closeModal = () => {
+    springAnimator.animate('modal-y', new Spring(Spring.SNAPPY), 0, 40, (val) => {
+      modal.style.transform = `translateY(${val}px) scale(${0.95 + 0.05 * (1 - val / 40)})`;
+      modal.style.opacity = String(1 - val / 40);
+    }, () => {
+      backdrop.classList.remove('visible');
+      modal.style.transform = '';
+      modal.style.opacity = '';
+    });
+    springAnimator.animate('modal-pushback', new Spring(Spring.GENTLE), 0.94, 1, (val) => {
+      app.style.transform = `scale(${val})`;
+      app.style.filter = val >= 0.999 ? '' : `blur(${(1 - val) * 60}px)`;
+    }, () => {
+      app.style.transform = '';
+      app.style.filter = '';
+    });
+  };
+
+  $('#modalClose')?.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal, { once: true });
+
+  content.querySelectorAll('.assign-project-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const projectId = parseInt(row.dataset.projectId);
+      const project = PROJECT_DATA.find(p => p.id === projectId);
+      if (!project) return;
+
+      const m = TEAM_DATA.find(t => t.id === member.id);
+      if (m) {
+        m.status = 'assigned';
+        m.project = project.name;
+      }
+
+      project.teamCount = Math.max(project.teamCount, 1);
+
+      renderTeamList();
+      closeModal();
+      showNotification('Assigned', `${member.name} assigned to ${project.name}.`);
+    });
+  });
+}
+
+
 // ---- Context Menu ----
 function showContextMenu(x, y) {
   const backdrop = $('#ctxBackdrop');
@@ -3662,7 +3826,7 @@ $$('.context-menu-item').forEach(item => {
       if (action === 'profile') {
         openMemberSheet(contextTarget.id);
       } else if (action === 'assign') {
-        showNotification('Assigned', `${contextTarget.name} has been assigned.`);
+        openAssignModal(contextTarget);
       } else if (action === 'schedule') {
         showNotification('Schedule', `Viewing schedule for ${contextTarget.name}.`);
       }
