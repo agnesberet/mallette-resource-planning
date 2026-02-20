@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-accent="blue">
+<html lang="en" data-theme="light" data-accent="mallette">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
@@ -50,22 +50,22 @@
 @property --bg-gradient-stop-1 {
   syntax: '<color>';
   inherits: true;
-  initial-value: #a8edea;
+  initial-value: #FFB3BC;
 }
 @property --bg-gradient-stop-2 {
   syntax: '<color>';
   inherits: true;
-  initial-value: #fed6e3;
+  initial-value: #FFCBB8;
 }
 @property --bg-gradient-stop-3 {
   syntax: '<color>';
   inherits: true;
-  initial-value: #d4fc79;
+  initial-value: #FFD4EC;
 }
 @property --bg-gradient-stop-4 {
   syntax: '<color>';
   inherits: true;
-  initial-value: #96e6a1;
+  initial-value: #FFA8B8;
 }
 
 /* Base reset */
@@ -116,10 +116,10 @@ body {
   --text-tertiary: rgba(0, 0, 0, 0.35);
   --text-inverse: rgba(255, 255, 255, 0.95);
 
-  --bg-gradient-stop-1: #a8edea;
-  --bg-gradient-stop-2: #fed6e3;
-  --bg-gradient-stop-3: #d4fc79;
-  --bg-gradient-stop-4: #96e6a1;
+  --bg-gradient-stop-1: #FFB3BC;
+  --bg-gradient-stop-2: #FFCBB8;
+  --bg-gradient-stop-3: #FFD4EC;
+  --bg-gradient-stop-4: #FFA8B8;
 
   --divider: rgba(0, 0, 0, 0.08);
   --skeleton-base: rgba(255, 255, 255, 0.3);
@@ -135,25 +135,25 @@ body {
   --glass-specular-opacity: 0.2;
   --glass-shadow-opacity: 0.4;
 
-  --glass-bg-rgb: 15, 10, 30;
-  --glass-tint-rgb: 100, 80, 160;
+  --glass-bg-rgb: 80, 10, 18;
+  --glass-tint-rgb: 180, 20, 40;
   --glass-border: rgba(255, 255, 255, var(--glass-border-opacity));
   --glass-shadow: rgba(0, 0, 0, var(--glass-shadow-opacity));
   --glass-specular: rgba(255, 255, 255, var(--glass-specular-opacity));
 
-  --surface-primary: rgba(20, 15, 40, 0.35);
-  --surface-secondary: rgba(25, 20, 50, 0.25);
-  --surface-tertiary: rgba(30, 25, 55, 0.18);
+  --surface-primary: rgba(40, 10, 12, 0.35);
+  --surface-secondary: rgba(50, 12, 14, 0.25);
+  --surface-tertiary: rgba(55, 14, 16, 0.18);
 
   --text-primary: rgba(255, 255, 255, 0.94);
   --text-secondary: rgba(255, 255, 255, 0.6);
   --text-tertiary: rgba(255, 255, 255, 0.35);
   --text-inverse: rgba(0, 0, 0, 0.88);
 
-  --bg-gradient-stop-1: #120a28;
-  --bg-gradient-stop-2: #1a1040;
-  --bg-gradient-stop-3: #0d1f3c;
-  --bg-gradient-stop-4: #1e0a2e;
+  --bg-gradient-stop-1: #7A1020;
+  --bg-gradient-stop-2: #5C0A14;
+  --bg-gradient-stop-3: #6B1028;
+  --bg-gradient-stop-4: #8A1818;
 
   --divider: rgba(255, 255, 255, 0.06);
   --skeleton-base: rgba(255, 255, 255, 0.05);
@@ -161,29 +161,35 @@ body {
 }
 
 /* ---- Accent Color Tokens ---- */
-[data-accent="blue"] {
-  --accent: #007AFF;
-  --accent-rgb: 0, 122, 255;
-  --accent-light: #5AC8FA;
-  --accent-dark: #0055CC;
+[data-accent="mallette"] {
+  --accent: #ED1C24;
+  --accent-rgb: 237, 28, 36;
+  --accent-light: #FF6B71;
+  --accent-dark: #B5131A;
 }
-[data-accent="purple"] {
-  --accent: #AF52DE;
-  --accent-rgb: 175, 82, 222;
-  --accent-light: #DA8FFF;
-  --accent-dark: #8944AB;
+[data-accent="rose"] {
+  --accent: #E0516B;
+  --accent-rgb: 224, 81, 107;
+  --accent-light: #F090A0;
+  --accent-dark: #C03050;
 }
-[data-accent="teal"] {
-  --accent: #5AC8FA;
-  --accent-rgb: 90, 200, 250;
-  --accent-light: #70D7FF;
-  --accent-dark: #30B0C7;
+[data-accent="lavender"] {
+  --accent: #9B73D4;
+  --accent-rgb: 155, 115, 212;
+  --accent-light: #C0A0EF;
+  --accent-dark: #7854B8;
 }
-[data-accent="orange"] {
-  --accent: #FF9500;
-  --accent-rgb: 255, 149, 0;
-  --accent-light: #FFB340;
-  --accent-dark: #CC7700;
+[data-accent="sky"] {
+  --accent: #4ABCF0;
+  --accent-rgb: 74, 188, 240;
+  --accent-light: #80D4FF;
+  --accent-dark: #2896CC;
+}
+[data-accent="peach"] {
+  --accent: #F09050;
+  --accent-rgb: 240, 144, 80;
+  --accent-light: #FFB070;
+  --accent-dark: #CC6A28;
 }
 
 /* ---- Reduced Motion ---- */
@@ -397,9 +403,8 @@ body {
 
 /* ---- Dark Toggle ---- */
 [data-theme="dark"] .glass-toggle {
-  background:
-    linear-gradient(180deg, rgba(var(--glass-bg-rgb), 0.4) 0%, rgba(var(--glass-bg-rgb), 0.25) 100%);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(210, 100, 100, 0.22);
+  border-color: rgba(210, 100, 100, 0.18);
   box-shadow:
     inset 0 1px 3px rgba(0,0,0,0.2),
     inset 0 0 8px rgba(0,0,0,0.1),
@@ -766,16 +771,35 @@ body {
   box-shadow: 0 1px 12px rgba(0,0,0,0.04), inset 0 -0.5px 0 rgba(0,0,0,0.04);
 }
 
+.navbar-logo-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.navbar-logo {
+  width: 108px;
+  height: auto;
+  color: #ED1C24;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="dark"] .navbar-logo {
+  color: #FF6B71;
+}
+
 .navbar-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.3px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.2px;
   transition: font-size 0.3s ease, opacity 0.3s ease;
+  line-height: 1;
 }
 
 .glass-navbar.scrolled .navbar-title {
-  font-size: 17px;
+  font-size: 11px;
 }
 
 .navbar-actions {
@@ -1063,11 +1087,10 @@ body {
   width: 52px;
   height: 32px;
   border-radius: 16px;
-  background:
-    linear-gradient(180deg, rgba(var(--glass-bg-rgb), 0.35) 0%, rgba(var(--glass-bg-rgb), 0.2) 100%);
+  background: rgba(210, 140, 140, 0.28);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(210, 140, 140, 0.18);
   box-shadow:
     inset 0 1px 3px rgba(0,0,0,0.06),
     inset 0 0 8px rgba(0,0,0,0.03),
@@ -1119,8 +1142,8 @@ body {
 .glass-textfield input,
 .glass-textfield textarea {
   width: 100%;
-  padding: 14px 16px;
-  padding-top: 20px;
+  padding: 12px 16px;
+  padding-top: 26px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-top-color: rgba(255, 255, 255, 0.25);
   border-radius: 14px;
@@ -1157,19 +1180,19 @@ body {
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-tertiary);
   pointer-events: none;
-  transition: all 0.2s ease;
-  transform-origin: left center;
+  transition: top 0.2s ease, transform 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+  transform-origin: left top;
 }
 
 .glass-textfield input:focus ~ label,
 .glass-textfield input:not(:placeholder-shown) ~ label,
 .glass-textfield textarea:focus ~ label,
 .glass-textfield textarea:not(:placeholder-shown) ~ label {
-  top: 10px;
-  transform: translateY(0) scale(0.75);
+  top: 8px;
+  transform: translateY(0) scale(0.72);
   color: var(--accent);
 }
 
@@ -1527,21 +1550,21 @@ body {
 }
 
 .badge-available {
-  background: rgba(0, 210, 200, 0.14);
-  color: #00c9b8;
-  border-color: rgba(0, 210, 200, 0.2);
+  background: rgba(255, 200, 205, 0.38);
+  color: #C84858;
+  border-color: rgba(212, 120, 130, 0.28);
 }
 
 .badge-assigned {
-  background: rgba(60, 130, 255, 0.14);
-  color: #3b82f6;
-  border-color: rgba(60, 130, 255, 0.2);
+  background: rgba(237, 28, 36, 0.13);
+  color: #B02838;
+  border-color: rgba(184, 40, 52, 0.22);
 }
 
 .badge-leave {
-  background: rgba(235, 90, 140, 0.14);
-  color: #e0508c;
-  border-color: rgba(235, 90, 140, 0.2);
+  background: rgba(200, 155, 165, 0.22);
+  color: #9A7080;
+  border-color: rgba(180, 130, 145, 0.20);
 }
 
 /* ---- GlassNotification ---- */
@@ -2069,28 +2092,55 @@ body {
 /* Accent color picker */
 .accent-picker {
   display: flex;
-  gap: 8px;
+  gap: 10px;
+  align-items: flex-start;
 }
 
-.accent-swatch {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 3px solid transparent;
+.accent-swatch-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
   cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-.accent-swatch.active {
-  border-color: var(--text-primary);
-  transform: scale(1.1);
+.accent-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
 }
 
-.accent-swatch[data-accent="blue"] { background: #007AFF; }
-.accent-swatch[data-accent="purple"] { background: #AF52DE; }
-.accent-swatch[data-accent="teal"] { background: #5AC8FA; }
-.accent-swatch[data-accent="orange"] { background: #FF9500; }
+.accent-swatch-wrap.active .accent-swatch {
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+  transform: scale(1.12);
+}
+
+.accent-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: var(--text-tertiary);
+  text-align: center;
+  line-height: 1;
+  transition: color 0.2s ease;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.accent-swatch-wrap.active .accent-label {
+  color: var(--accent);
+}
+
+.accent-swatch[data-accent="mallette"] { background: #ED1C24; }
+.accent-swatch[data-accent="rose"]     { background: #E0516B; }
+.accent-swatch[data-accent="lavender"] { background: #9B73D4; }
+.accent-swatch[data-accent="sky"]      { background: #4ABCF0; }
+.accent-swatch[data-accent="peach"]    { background: #F09050; }
 
 /* Background picker thumbnails */
 .bg-picker {
@@ -2118,16 +2168,17 @@ body {
 }
 
 .bg-thumb.active {
-  border-color: var(--accent);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
 }
 
 .bg-thumb-gradient {
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #96e6a1 100%);
+  background: linear-gradient(135deg, #FFB3BC 0%, #FFCBB8 50%, #FFA8B8 100%);
 }
 
 [data-theme="dark"] .bg-thumb-gradient {
-  background: linear-gradient(135deg, #120a28 0%, #1a1040 50%, #1e0a2e 100%);
+  background: linear-gradient(135deg, #7A1020 0%, #5C0A14 50%, #8A1818 100%);
 }
 
 /* Back arrow for sub-pages */
@@ -2183,7 +2234,25 @@ body {
 
   <!-- NavBar -->
   <header class="glass-navbar" id="navbar">
-    <span class="navbar-title" id="navbarTitle">Dashboard</span>
+    <div class="navbar-logo-group">
+      <svg class="navbar-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 22.986" aria-label="Mallette" role="img">
+        <g>
+          <clipPath id="nl-clip"><rect width="180" height="22.986" fill="currentColor"/></clipPath>
+          <g clip-path="url(#nl-clip)">
+            <path d="M1620.565.013h0s0,0,0,0" transform="translate(-1461.655 -0.012)" fill="currentColor"/>
+            <path d="M1663.928,9.994c-.032,0,.032-.011,0-.011h-15.2V3.061l15.2-.008V.013h-18.66V22.981l18.659-.023v-3.04l-15.2.008V12.878h15.2V10.027c-.007-.008.006-.014,0-.019s.007-.013,0-.014" transform="translate(-1483.937 -0.012)" fill="currentColor"/>
+            <path d="M1430.04.013v3.04l12.823.008V22.976l3.456,0V.013Z" transform="translate(-1289.814 -0.011)" fill="currentColor"/>
+            <path d="M1233.547.081v3.04l12.823.008V23.044l3.456,0V.081Z" transform="translate(-1112.588 -0.073)" fill="currentColor"/>
+            <path d="M1032.668,10.025c-.032,0,.032-.011,0-.011h-15.2V3.092l15.2-.008V.044h-18.66V23.012l18.659-.023v-3.04l-15.2.008V12.909h15.2V10.058c-.007-.008.006-.014,0-.019s.007-.013,0-.014" transform="translate(-914.577 -0.04)" fill="currentColor"/>
+            <path d="M637.377,23.036V20l-12.823-.008V.073l-3.456,0V23.036Z" transform="translate(-560.193 -0.062)" fill="currentColor"/>
+            <path d="M833.87,22.968v-3.04l-12.823-.008V0l-3.456,0V22.968Z" transform="translate(-737.419 0)" fill="currentColor"/>
+            <path d="M335.214.013H330.57L318.934,23h3.79l3.17-6.33h14L343.06,23h3.79Zm-7.8,13.627,5.482-10.947,5.482,10.947Z" transform="translate(-287.66 -0.012)" fill="currentColor"/>
+            <path d="M25.4.013h-.038L14.788,18.119,4.217.013H0V23H3.248V4.467L13.818,23h1.94l10.57-18.53V23h3.247V.013Z" transform="translate(0 -0.011)" fill="currentColor"/>
+          </g>
+        </g>
+      </svg>
+      <span class="navbar-title" id="navbarTitle"></span>
+    </div>
     <div class="navbar-actions">
       <button class="glass-btn glass-btn-ghost glass-btn-round" id="notifyBtn" aria-label="Notification demo">
         <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -2199,8 +2268,25 @@ body {
       <div class="page-section stagger-in">
         <!-- Hero -->
         <div class="glass glass-2 hero-card glass-card">
-          <div class="hero-title">Mallette Resource Planning</div>
-          <div class="hero-subtitle">Plan. Assign. Optimize.</div>
+          <div style="display:flex;justify-content:center;margin-bottom:10px">
+            <svg style="width:160px;height:auto;color:#ED1C24;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 22.986" aria-label="Mallette" role="img">
+              <g>
+                <clipPath id="hero-clip"><rect width="180" height="22.986" fill="currentColor"/></clipPath>
+                <g clip-path="url(#hero-clip)">
+                  <path d="M1620.565.013h0s0,0,0,0" transform="translate(-1461.655 -0.012)" fill="currentColor"/>
+                  <path d="M1663.928,9.994c-.032,0,.032-.011,0-.011h-15.2V3.061l15.2-.008V.013h-18.66V22.981l18.659-.023v-3.04l-15.2.008V12.878h15.2V10.027c-.007-.008.006-.014,0-.019s.007-.013,0-.014" transform="translate(-1483.937 -0.012)" fill="currentColor"/>
+                  <path d="M1430.04.013v3.04l12.823.008V22.976l3.456,0V.013Z" transform="translate(-1289.814 -0.011)" fill="currentColor"/>
+                  <path d="M1233.547.081v3.04l12.823.008V23.044l3.456,0V.081Z" transform="translate(-1112.588 -0.073)" fill="currentColor"/>
+                  <path d="M1032.668,10.025c-.032,0,.032-.011,0-.011h-15.2V3.092l15.2-.008V.044h-18.66V23.012l18.659-.023v-3.04l-15.2.008V12.909h15.2V10.058c-.007-.008.006-.014,0-.019s.007-.013,0-.014" transform="translate(-914.577 -0.04)" fill="currentColor"/>
+                  <path d="M637.377,23.036V20l-12.823-.008V.073l-3.456,0V23.036Z" transform="translate(-560.193 -0.062)" fill="currentColor"/>
+                  <path d="M833.87,22.968v-3.04l-12.823-.008V0l-3.456,0V22.968Z" transform="translate(-737.419 0)" fill="currentColor"/>
+                  <path d="M335.214.013H330.57L318.934,23h3.79l3.17-6.33h14L343.06,23h3.79Zm-7.8,13.627,5.482-10.947,5.482,10.947Z" transform="translate(-287.66 -0.012)" fill="currentColor"/>
+                  <path d="M25.4.013h-.038L14.788,18.119,4.217.013H0V23H3.248V4.467L13.818,23h1.94l10.57-18.53V23h3.247V.013Z" transform="translate(0 -0.011)" fill="currentColor"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div class="hero-subtitle">Resource Planning</div>
           <div class="hero-date" id="heroDate"></div>
         </div>
 
@@ -2327,10 +2413,26 @@ body {
           <div class="settings-row">
             <span class="settings-label">Accent Color</span>
             <div class="accent-picker">
-              <div class="accent-swatch active" data-accent="blue"></div>
-              <div class="accent-swatch" data-accent="purple"></div>
-              <div class="accent-swatch" data-accent="teal"></div>
-              <div class="accent-swatch" data-accent="orange"></div>
+              <div class="accent-swatch-wrap active" data-accent="mallette">
+                <div class="accent-swatch" data-accent="mallette"></div>
+                <span class="accent-label">Mallette</span>
+              </div>
+              <div class="accent-swatch-wrap" data-accent="rose">
+                <div class="accent-swatch" data-accent="rose"></div>
+                <span class="accent-label">Rose</span>
+              </div>
+              <div class="accent-swatch-wrap" data-accent="lavender">
+                <div class="accent-swatch" data-accent="lavender"></div>
+                <span class="accent-label">Lavender</span>
+              </div>
+              <div class="accent-swatch-wrap" data-accent="sky">
+                <div class="accent-swatch" data-accent="sky"></div>
+                <span class="accent-label">Sky</span>
+              </div>
+              <div class="accent-swatch-wrap" data-accent="peach">
+                <div class="accent-swatch" data-accent="peach"></div>
+                <span class="accent-label">Peach</span>
+              </div>
             </div>
           </div>
           <div class="settings-row">
@@ -2373,8 +2475,25 @@ body {
 
         <div class="section-title" style="margin-top:20px">About</div>
         <div class="glass glass-1 glass-card about-card">
-          <div class="card-title">Mallette Resource Planning</div>
-          <div class="card-subtitle">v0.1 &mdash; Liquid Glass UI</div>
+          <div style="display:flex;justify-content:center;margin-bottom:8px">
+            <svg style="width:120px;height:auto;color:#ED1C24;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 22.986" aria-label="Mallette" role="img">
+              <g>
+                <clipPath id="about-clip"><rect width="180" height="22.986" fill="currentColor"/></clipPath>
+                <g clip-path="url(#about-clip)">
+                  <path d="M1620.565.013h0s0,0,0,0" transform="translate(-1461.655 -0.012)" fill="currentColor"/>
+                  <path d="M1663.928,9.994c-.032,0,.032-.011,0-.011h-15.2V3.061l15.2-.008V.013h-18.66V22.981l18.659-.023v-3.04l-15.2.008V12.878h15.2V10.027c-.007-.008.006-.014,0-.019s.007-.013,0-.014" transform="translate(-1483.937 -0.012)" fill="currentColor"/>
+                  <path d="M1430.04.013v3.04l12.823.008V22.976l3.456,0V.013Z" transform="translate(-1289.814 -0.011)" fill="currentColor"/>
+                  <path d="M1233.547.081v3.04l12.823.008V23.044l3.456,0V.081Z" transform="translate(-1112.588 -0.073)" fill="currentColor"/>
+                  <path d="M1032.668,10.025c-.032,0,.032-.011,0-.011h-15.2V3.092l15.2-.008V.044h-18.66V23.012l18.659-.023v-3.04l-15.2.008V12.909h15.2V10.058c-.007-.008.006-.014,0-.019s.007-.013,0-.014" transform="translate(-914.577 -0.04)" fill="currentColor"/>
+                  <path d="M637.377,23.036V20l-12.823-.008V.073l-3.456,0V23.036Z" transform="translate(-560.193 -0.062)" fill="currentColor"/>
+                  <path d="M833.87,22.968v-3.04l-12.823-.008V0l-3.456,0V22.968Z" transform="translate(-737.419 0)" fill="currentColor"/>
+                  <path d="M335.214.013H330.57L318.934,23h3.79l3.17-6.33h14L343.06,23h3.79Zm-7.8,13.627,5.482-10.947,5.482,10.947Z" transform="translate(-287.66 -0.012)" fill="currentColor"/>
+                  <path d="M25.4.013h-.038L14.788,18.119,4.217.013H0V23H3.248V4.467L13.818,23h1.94l10.57-18.53V23h3.247V.013Z" transform="translate(0 -0.011)" fill="currentColor"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div class="card-subtitle">Resource Planning &mdash; v0.1</div>
         </div>
 
       </div>
@@ -2618,6 +2737,9 @@ const tabbarInner = $('#tabbarInner');
 const now = new Date();
 $('#heroDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
+// ---- Initial navbar subtitle ----
+$('#navbarTitle').textContent = 'Resource Planning';
+
 
 // ---- Scroll-aware navbar ----
 pageContent.addEventListener('scroll', () => {
@@ -2680,17 +2802,18 @@ function switchTab(tab) {
   currentTab = tab;
 
   // View transition
+  const pageLabel = tab === 'home' ? 'Resource Planning' : (newPage?.dataset.title || '');
   if (document.startViewTransition) {
     document.startViewTransition(() => {
       if (oldPage) oldPage.classList.remove('active');
       if (newPage) newPage.classList.add('active');
-      navbarTitle.textContent = newPage?.dataset.title || '';
+      navbarTitle.textContent = pageLabel;
       pageContent.scrollTop = 0;
     });
   } else {
     if (oldPage) oldPage.classList.remove('active');
     if (newPage) newPage.classList.add('active');
-    navbarTitle.textContent = newPage?.dataset.title || '';
+    navbarTitle.textContent = pageLabel;
     pageContent.scrollTop = 0;
   }
 
@@ -2858,11 +2981,11 @@ updateSliderFill(hoursSlider);
 
 
 // ---- Accent color picker ----
-$$('.accent-swatch').forEach(swatch => {
-  swatch.addEventListener('click', () => {
-    $$('.accent-swatch').forEach(s => s.classList.remove('active'));
-    swatch.classList.add('active');
-    document.documentElement.dataset.accent = swatch.dataset.accent;
+$$('.accent-swatch-wrap').forEach(wrap => {
+  wrap.addEventListener('click', () => {
+    $$('.accent-swatch-wrap').forEach(w => w.classList.remove('active'));
+    wrap.classList.add('active');
+    document.documentElement.dataset.accent = wrap.dataset.accent;
     // Re-update slider fill
     updateSliderFill(hoursSlider);
     // Re-position tab pill to pick up color change
